@@ -4,7 +4,11 @@ use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
 use Mustache_Engine;
 
-abstract class Generator
+/**
+ * Class to handle the generation of files from
+ * templates
+ */
+class Generator
 {
     /**
      * Filesystem object used to write
@@ -27,7 +31,7 @@ abstract class Generator
      * 
      * @var string
      */
-    protected $destinationFileName;
+    protected $destinationFileName = null;
 
     /**
      * Name of the entity the generator
@@ -52,14 +56,32 @@ abstract class Generator
 
 
 
+    /**
+     * Function to create and write out a parsed template
+     * 
+     * @param  string $entity         name of the entity being operated on
+     * @param  string $sourceTemplate path to the raw template to work with
+     * @param  string $destinationDir destination directory to write parsed template into
+     * @param  string $fileName       templatized filename (not path) to write to
+     * @return bool
+     */
     public function make($entity, $sourceTemplate, $destinationDir, $fileName = null)
     {
         //set the entity we're creating for
         //later template parsing operations
         $this->entity = $entity;
 
+        //set local var for template vars used for subsequent calls
+        $templateVars = $this->getTemplateVars();
+
         //set into a class var vor getFileName() to use if necessary
-        $this->destinationFileName = $fileName ?: null;
+        if (! is_null($fileName)) {
+            $this->destinationFileName = $this->mustache
+                ->render($fileName, $templateVars);
+        }
+
+        //parse any template values in the destinationDir
+        $destinationDir = $this->mustache->render($destinationDir, $templateVars);
 
         //get the compiled template
         $template = $this->getTemplate($sourceTemplate);
@@ -83,11 +105,9 @@ abstract class Generator
      */
     public function getTemplateVars()
     {
-        $name   = $this->getFileName();
         $entity = $this->getEntityName();
 
         return [
-            'ClassName'  => basename($name, ".". pathinfo($name, PATHINFO_EXTENSION)),
             'Entity'     => Str::studly($entity),
             'Entities'   => Str::plural(Str::studly($entity)),
             'collection' => Str::plural(Str::snake($entity)),
@@ -114,7 +134,10 @@ abstract class Generator
      * 
      * @return string
      */
-    abstract public function getFileName();
+    public function getFileName()
+    {
+        return $this->destinationFileName ?: $this->getEntityName() .".php";
+    }
 
 
     /**

@@ -25,6 +25,7 @@ class GeneratorTest extends \BlacksmithTest
 
         $fs = m::mock('Illuminate\Filesystem\Filesystem');
         $me = m::mock('Mustache_Engine');
+        $me->shouldDeferMissing();
 
         $generator = m::mock('Generators\Generator', array($fs, $me));
         $generator->shouldDeferMissing();
@@ -50,6 +51,9 @@ class GeneratorTest extends \BlacksmithTest
         //first we test a file that does not exist
         $this->assertTrue($generator->make('order', $template, $destination));
 
+        //go ahead and assert on entity name
+        $this->assertEquals('order', strtolower($generator->getEntityName()));
+
         //now we mock that the file already exists
         $fs->shouldReceive('exists')
             ->once()
@@ -57,8 +61,48 @@ class GeneratorTest extends \BlacksmithTest
 
         //test making a file that exists, should return false
         $this->assertFalse($generator->make('order', $template, $destination));
+    }
 
-        $this->assertEquals('order', strtolower($generator->getEntityName()));
+
+
+    public function testMakeWithCustomFilename()
+    {
+        $template = '/path/to/source/template.txt';
+        $destTplPath = '/render/{{instance}}/template/here';
+        $destination = '/render/order/template/here';
+        $tplFileName = '{{Entity}}FileName.php';
+        $prsFileName = 'OrderFileName.php';
+
+        $outfile = implode(DIRECTORY_SEPARATOR, [$destination, $prsFileName]);
+
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+
+        $fs->shouldReceive('exists')
+            ->once()
+            ->with($outfile)
+            ->andReturn(false);
+
+        $fs->shouldReceive('put')
+            ->once()
+            ->with($outfile, "");
+
+        $me = m::mock('Mustache_Engine');
+        $me->shouldDeferMissing();
+
+        $generator = m::mock('Generators\Generator', array($fs, $me));
+        $generator->shouldDeferMissing();
+
+        $generator->shouldReceive('getTemplate')
+            ->once()
+            ->with($template)
+            ->andReturn("");
+
+        $result = $generator->make('order', $template, $destTplPath, $tplFileName);
+
+        $this->assertEquals(
+            $prsFileName,
+            $generator->getFileName()
+        );
     }
 
 
@@ -71,11 +115,7 @@ class GeneratorTest extends \BlacksmithTest
         $generator->shouldReceive('getEntityName')->once()
             ->andReturn('Order');
 
-        $generator->shouldReceive('getFileName')->once()
-            ->andReturn('Order.php');
-
         $expected = [
-            'ClassName'  => 'Order',
             'Entity'     => 'Order',
             'Entities'   => 'Orders',
             'collection' => 'orders',
@@ -95,11 +135,7 @@ class GeneratorTest extends \BlacksmithTest
         $generator->shouldReceive('getEntityName')->once()
             ->andReturn('EcommerceOrderCreator');
 
-        $generator->shouldReceive('getFileName')->once()
-            ->andReturn('EcommerceOrderCreator.php');
-
         $expected = [
-            'ClassName'  => 'EcommerceOrderCreator',
             'Entity'     => 'EcommerceOrderCreator',
             'Entities'   => 'EcommerceOrderCreators',
             'collection' => 'ecommerce_order_creators',
@@ -114,7 +150,6 @@ class GeneratorTest extends \BlacksmithTest
     public function testGetTemplate()
     {
         $templateText = '
-            {{ClassName}}
             Nested{{Entity}}SomethingOrAnother
             CollectionOf{{Entities}}
             ${{collection}}->call();
@@ -122,7 +157,6 @@ class GeneratorTest extends \BlacksmithTest
         ';
 
         $parsedTemplate = '
-            Order
             NestedOrderSomethingOrAnother
             CollectionOfOrders
             $orders->call();
@@ -140,9 +174,6 @@ class GeneratorTest extends \BlacksmithTest
 
         $generator->shouldReceive('getEntityName')->once()
             ->andReturn('Order');
-
-        $generator->shouldReceive('getFileName')->once()
-            ->andReturn('Order.php');
 
         $result = $generator->getTemplate($template);
         $this->assertEquals(

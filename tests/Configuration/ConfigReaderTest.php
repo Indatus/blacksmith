@@ -1,0 +1,192 @@
+<?php namespace Configuration;
+
+
+use Configuration\ConfigReader;
+use Illuminate\Filesystem\Filesystem;
+use Mockery as m;
+
+class ConfigReaderTest extends \BlacksmithTest
+{
+    public function testReadGivenConfig()
+    {
+        $path = '/path/to/config.json';
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldReceive('exists')->once()->with($path)->andReturn(true);
+        $fs->shouldReceive('get')->once()->with($path);
+
+        $reader = new ConfigReader($fs, $path);
+    }
+
+
+
+    public function testReadDefaultConfig()
+    {
+        $path = realpath(__DIR__.'/../Generators/templates/hexagonal/config.json');
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldReceive('get')->once()->with($path);
+
+        $reader = new ConfigReader($fs);
+    }
+
+
+
+    public function testValidConfig()
+    {
+        $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
+
+        $json = file_get_contents($path);
+
+        $configArr = json_decode($json, true);
+
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldReceive('get')->once()->withAnyArgs()
+            ->andReturn($json);
+
+        $reader = new ConfigReader($fs);
+
+        $this->assertTrue($reader->validateConfig());
+    }
+
+
+
+    public function testInvalidConfigWithMissingConfigType()
+    {
+        $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
+
+        $json = file_get_contents($path);
+
+        $configArr = json_decode($json, true);
+
+        $missing = $configArr;
+        unset($missing[ConfigReader::CONFIG_TYPE_KEY]);
+        $missingJson = json_encode($missing, JSON_UNESCAPED_SLASHES);
+
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldReceive('get')->once()->withAnyArgs()
+            ->andReturn($missingJson);
+
+        $reader = new ConfigReader($fs);
+        $this->assertFalse($reader->validateConfig());
+    }
+
+
+
+    public function testInvalidConfigWithMissingRequiredKey()
+    {
+        $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
+
+        $json = file_get_contents($path);
+
+        $configArr = json_decode($json, true);
+
+        $missing = $configArr;
+        unset($missing[ConfigReader::CONFIG_KEY_MODEL]);
+        $missingJson = json_encode($missing, JSON_UNESCAPED_SLASHES);
+
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldReceive('get')->once()->withAnyArgs()
+            ->andReturn($missingJson);
+
+        $reader = new ConfigReader($fs);
+        $this->assertFalse($reader->validateConfig());
+    }
+
+
+
+    public function testInvalidConfigWithMissingRequiredTemplateSubKey()
+    {
+        $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
+
+        $json = file_get_contents($path);
+
+        $configArr = json_decode($json, true);
+
+        $missing = $configArr;
+        unset($missing[ConfigReader::CONFIG_KEY_MODEL][ConfigReader::CONFIG_VAL_TEMPLATE]);
+        $missingJson = json_encode($missing, JSON_UNESCAPED_SLASHES);
+
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldReceive('get')->once()->withAnyArgs()
+            ->andReturn($missingJson);
+
+        $reader = new ConfigReader($fs);
+        $this->assertFalse($reader->validateConfig());
+    }
+
+
+
+    public function testInvalidConfigWithMissingRequiredDirectorySubKey()
+    {
+        $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
+
+        $json = file_get_contents($path);
+
+        $configArr = json_decode($json, true);
+
+        $missing = $configArr;
+        unset($missing[ConfigReader::CONFIG_KEY_MODEL][ConfigReader::CONFIG_VAL_DIRECTORY]);
+        $missingJson = json_encode($missing, JSON_UNESCAPED_SLASHES);
+
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldReceive('get')->once()->withAnyArgs()
+            ->andReturn($missingJson);
+
+        $reader = new ConfigReader($fs);
+        $this->assertFalse($reader->validateConfig());
+    }
+
+
+
+    public function testInvalidConfigWithMissingRequiredFilenameSubKey()
+    {
+        $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
+
+        $json = file_get_contents($path);
+
+        $configArr = json_decode($json, true);
+
+        $missing = $configArr;
+        unset($missing[ConfigReader::CONFIG_KEY_MODEL][ConfigReader::CONFIG_VAL_FILENAME]);
+        $missingJson = json_encode($missing, JSON_UNESCAPED_SLASHES);
+
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldReceive('get')->once()->withAnyArgs()
+            ->andReturn($missingJson);
+
+        $reader = new ConfigReader($fs);
+        $this->assertFalse($reader->validateConfig());
+    }
+
+
+    public function testGetConfigValueShouldPass()
+    {
+        $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
+
+        $json = file_get_contents($path);
+
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldReceive('get')->once()->withAnyArgs()
+            ->andReturn($json);
+
+        $reader = new ConfigReader($fs);
+        $result = $reader->getConfigValue(ConfigReader::CONFIG_KEY_MODEL);
+        
+        $this->assertTrue(is_array($result));
+    }
+
+
+    public function testGetConfigValueShouldFail()
+    {
+        $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
+
+        $json = file_get_contents($path);
+
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldReceive('get')->once()->withAnyArgs()
+            ->andReturn($json);
+
+        $reader = new ConfigReader($fs);
+        $result = $reader->getConfigValue('something-invalid');
+        $this->assertFalse($result);
+    }
+}

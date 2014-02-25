@@ -1,0 +1,79 @@
+{
+    "config_type": "hexagonal",
+
+    "model": {
+        "template": "model.txt",
+        "directory": "app/models",
+        "filename": "{{Entity}}.php"
+    },
+    "controller": {
+        "template": "controller.txt",
+        "directory": "app/controllers",
+        "filename": "{{Entities}}Controller.php"
+    },
+    "seed": {
+        "template": "seed.txt",
+        "directory": "app/database/seeds",
+        "filename": "{{Entities}}TableSeeder.php"
+    },
+    "migration_create": {
+        "template": "migration_create.txt",
+        "directory": "app/database/migrations",
+        "filename": "{{migration_timestamp}}_create_{{collection}}_table.php"
+    },
+    "view_create": {
+        "template": "view_create.txt",
+        "directory": "app/views/{{collection}}",
+        "filename": "create.blade.php"
+    },
+    "view_update": {
+        "template": "view_update.txt",
+        "directory": "app/views/{{collection}}",
+        "filename": "update.blade.php"
+    },
+    "view_show": {
+        "template": "view_show.txt",
+        "directory": "app/views/{{collection}}",
+        "filename": "show.blade.php"
+    },
+    "view_index": {
+        "template": "view_index.txt",
+        "directory": "app/views/{{collection}}",
+        "filename": "index.blade.php"
+    },
+    "form": {
+        "template": "view_form.txt",
+        "directory": "app/views/{{collection}}",
+        "filename": "_form.blade.php"
+    },
+    "test_unit": {
+        "template": "test_unit.txt",
+        "directory": "app/tests/models",
+        "filename": "{{Entity}}Test.php"
+    },
+    "test_functional": {
+        "template": "test_functional.txt",
+        "directory": "app/tests/controllers",
+        "filename": "{{Entities}}Test.php"
+    },
+    "service_creator": {
+        "template": "service_creator.txt",
+        "directory": "app/lib/Services/{{Entities}}",
+        "filename": "{{Entity}}Creator.php"
+    },
+    "service_updater": {
+        "template": "service_updater.txt",
+        "directory": "app/lib/Services/{{Entities}}",
+        "filename": "{{Entity}}Updater.php"
+    },
+    "service_destroyer": {
+        "template": "service_destroyer.txt",
+        "directory": "app/lib/Services/{{Entities}}",
+        "filename": "{{Entity}}Destroyer.php"
+    },
+    "validator": {
+        "template": "validator.txt",
+        "directory": "app/lib/Validators",
+        "filename": "{{Entity}}Validator.php"
+    }
+}
