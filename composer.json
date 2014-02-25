@@ -1,0 +1,36 @@
+{
+    "name": "indatus/blacksmith",
+    "description": "Template based CLI code generation tool",
+    "keywords": ["laravel code generator", "laravel generator", "blacksmith"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Brian Webb",
+            "email": "brianwebb01@gmail.com"
+        }
+    ],
+    "autoload": {
+        "classmap": ["src/lib"],
+        "files": [
+            "src/vendor/illuminate/support/Illuminate/Support/helpers.php"
+        ]
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*@dev",
+        "kherge/amend": "~3.0",
+        "symfony/console": "2.4.*",
+        "illuminate/filesystem": "4.2.*@dev",
+        "mustache/mustache": "dev-dev"
+    },
+    "require-dev": {
+        "mockery/mockery": "dev-master",
+        "mikey179/vfsStream": "1.3.*@dev",
+        "hot/phpunit-runner": "dev-master"
+    },
+    "config": {
+        "bin-dir": "bin",
+        "vendor-dir": "src/vendor"
+    },
+    "minimum-stability": "stable"
+}

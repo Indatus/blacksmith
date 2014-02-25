@@ -1,0 +1,10 @@
+todo.md
+todo.html
+tests/coverage
+tests/meta
+/src/vendor
+/bin/hot-notify
+/bin/hot-phpunit-runner
+/bin/jsonlint
+/bin/validate-json
+.DS_Store
