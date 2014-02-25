@@ -1,0 +1,13 @@
+<?php
+
+use Contracts\Instances\InstanceInterface;
+
+class {{Model}} extends Eloquent implements InstanceInterface
+{
+    protected $guarded = [];
+
+    public function identity()
+    {
+        return $this->id;
+    }
+}
