@@ -42,6 +42,11 @@ class Generator
     protected $entity;
 
 
+    protected $parsedTemplate;
+
+    protected $templateDestination;
+
+
     /**
      * Constructor to set member vars
      * 
@@ -84,17 +89,41 @@ class Generator
         $destinationDir = $this->mustache->render($destinationDir, $templateVars);
 
         //get the compiled template
-        $template = $this->getTemplate($sourceTemplate);
+        $this->parsedTemplate = $this->getTemplate($sourceTemplate);
 
         //find out where to write the file
-        $destination = implode(DIRECTORY_SEPARATOR, [$destinationDir, $this->getFileName()]);
+        $this->templateDestination = implode(DIRECTORY_SEPARATOR, [$destinationDir, $this->getFileName()]);
 
         //actually do the write operation
-        if (! $this->filesystem->exists($destination)) {
-            return $this->filesystem->put($destination, $template) !== false;
+        if (! $this->filesystem->exists($this->templateDestination)) {
+            return $this->filesystem->put($this->templateDestination, $this->parsedTemplate) !== false;
         }
 
         return false;
+    }
+
+
+    /**
+     * Function to return the text of the 
+     * final parsed template
+     * 
+     * @return string
+     */
+    public function getParsedTemplate()
+    {
+        return $this->parsedTemplate;
+    }
+
+
+    /**
+     * Function to return the filesystem location
+     * of the parsed template's final destination
+     * 
+     * @return string
+     */
+    public function getTemplateDestination()
+    {
+        return $this->templateDestination;
     }
 
 

@@ -54,6 +54,18 @@ class GeneratorTest extends \BlacksmithTest
         //go ahead and assert on entity name
         $this->assertEquals('order', strtolower($generator->getEntityName()));
 
+        $this->assertEquals(
+            $parsedTemplate,
+            $generator->getParsedTemplate()
+        );
+
+        $this->assertEquals(
+            $outfile,
+            $generator->getTemplateDestination()
+        );
+
+        //NOW SECOND TEST
+
         //now we mock that the file already exists
         $fs->shouldReceive('exists')
             ->once()

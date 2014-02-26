@@ -110,20 +110,36 @@ class GeneratorDelegate implements SingleGeneratorDelegateInterface
         }
 
         //should be good to generate, get the config values
-        $settings  = $config->getConfigValue($this->generation_request);
+        $settings  = $this->config->getConfigValue($this->generation_request);
 
         $template  = $settings[ConfigReader::CONFIG_VAL_TEMPLATE];
         $directory = $settings[ConfigReader::CONFIG_VAL_DIRECTORY];
         $filename  = $settings[ConfigReader::CONFIG_VAL_FILENAME];
 
         //run generator
-        $this->generator->make(
+        $success = $this->generator->make(
             $this->generate_for_entity,
             $template,
             $directory,
             $filename
         );
 
-        return true;
+        if ($success) {
+
+            $this->command->comment(
+                'Blacksmith',
+                'Success, I generated the code for you in '. $this->generator->getTemplateDestination()
+            );
+            return true;
+
+        } else {
+
+            $this->command->comment(
+                'Blacksmith',
+                'An unknown error occured, nothing was generated',
+                true
+            );
+            return false;
+        }
     }
 }
