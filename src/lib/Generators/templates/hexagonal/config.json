@@ -46,13 +46,13 @@
         "directory": "app/views/{{collection}}",
         "filename": "_form.blade.php"
     },
-    "test_unit": {
-        "template": "test_unit.txt",
+    "unit_test": {
+        "template": "unit_test.txt",
         "directory": "app/tests/models",
         "filename": "{{Entity}}Test.php"
     },
-    "test_functional": {
-        "template": "test_functional.txt",
+    "functional_test": {
+        "template": "functional_test.txt",
         "directory": "app/tests/controllers",
         "filename": "{{Entities}}Test.php"
     },

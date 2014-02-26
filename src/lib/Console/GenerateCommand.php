@@ -55,6 +55,9 @@ class GenerateCommand extends \Symfony\Component\Console\Command\Command
     {
         $filesystem = new Filesystem;
 
+        /**
+         * @todo Refactor this to be retrieved by a factory
+         */
         $delegate = new GeneratorDelegate(
             $this,
             new ConfigReader($filesystem, $this->argument('config_file')),
