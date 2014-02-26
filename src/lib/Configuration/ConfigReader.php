@@ -144,6 +144,36 @@ class ConfigReader
 
 
     /**
+     * Function to return an array of possible
+     * generations for the loaded config
+     *
+     * @param string $config_type
+     * @return array
+     */
+    public function getAvailableGenerators($config_type)
+    {
+        if (! in_array($config_type, $this->config_types)) {
+            return false;
+        }
+
+        $keys_var = $config_type.'_config_keys';
+
+        return $this->{$keys_var};
+    }
+
+
+    /**
+     * Function to return the loaded config type
+     * 
+     * @return string
+     */
+    public function getConfigType()
+    {
+        return $this->config[static::CONFIG_TYPE_KEY];
+    }
+
+
+    /**
      * Function to get a configuration 
      * key's values
      * 

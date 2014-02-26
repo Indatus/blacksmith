@@ -48,6 +48,37 @@ class ConfigReaderTest extends \BlacksmithTest
     }
 
 
+    public function testGetAvailableGenerators()
+    {
+        $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
+
+        $json = file_get_contents($path);
+
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldReceive('get')->once()->withAnyArgs()
+            ->andReturn($json);
+
+        $reader = new ConfigReader($fs);
+
+        $this->assertTrue(
+            is_array(
+                $reader->getAvailableGenerators(
+                    ConfigReader::CONFIG_TYPE_HEXAGONAL
+                )
+            )
+        );
+
+        $this->assertEquals(
+            ConfigReader::CONFIG_TYPE_HEXAGONAL,
+            $reader->getConfigType()
+        );
+
+        $this->assertFalse(
+            $reader->getAvailableGenerators('foo')
+        );
+    }
+
+
 
     public function testInvalidConfigWithMissingConfigType()
     {
