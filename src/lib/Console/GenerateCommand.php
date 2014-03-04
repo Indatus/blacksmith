@@ -14,11 +14,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Delegates\GeneratorDelegate;
-use Configuration\ConfigReader;
-use Generators\Generator;
-use Illuminate\Support\Str;
-use Illuminate\Filesystem\Filesystem;
-use Mustache_Engine;
+use Factories\GeneratorFactory;
+use Factories\ConfigReaderFactory;
 
 /**
  * CLI command used to build a new Laravel app
@@ -53,18 +50,13 @@ class GenerateCommand extends \Symfony\Component\Console\Command\Command
      */
     protected function fire()
     {
-        $filesystem = new Filesystem;
-
-        //create a new generator class w/ a string
-        $generator = "Generators\\". Str::studly($this->argument('what'));
-
         /**
          * @todo Refactor this to be retrieved by a factory
          */
         $delegate = new GeneratorDelegate(
             $this,
-            new ConfigReader($filesystem, (empty($this->argument('config-file')) ? null : $this->argument('config-file'))),
-            new $generator($filesystem, new Mustache_Engine),
+            ConfigReaderFactory::make($this->argument('config-file')),
+            GeneratorFactory::make($this->argument('what')),
             $this->input->getArguments(),
             $this->getOptions()
         );

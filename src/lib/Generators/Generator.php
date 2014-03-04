@@ -9,7 +9,7 @@ use Mustache_Engine;
  * Class to handle the generation of files from
  * templates
  */
-class Generator
+class Generator implements GeneratorInterface
 {
     /**
      * Filesystem object used to write

@@ -4,7 +4,7 @@ use Illuminate\Filesystem\Filesystem;
 use Mustache_Engine;
 use Parsers\FieldParser;
 
-class FunctionalTest extends Generator
+class FunctionalTest extends Generator implements GeneratorInterface
 {
 
     /**

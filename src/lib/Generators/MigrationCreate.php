@@ -4,7 +4,7 @@ use Illuminate\Filesystem\Filesystem;
 use Mustache_Engine;
 use Parsers\FieldParser;
 
-class MigrationCreate extends Generator
+class MigrationCreate extends Generator implements GeneratorInterface
 {
 
     /**
@@ -17,4 +17,23 @@ class MigrationCreate extends Generator
     {
         parent::__construct($filesystem, $mustache, $fieldParser);
     }
+
+
+    // /**
+    //  * Function to get the minimum template variables
+    //  * 
+    //  * @return array
+    //  */
+    // public function getTemplateVars()
+    // {
+    //     $entity = $this->getEntityName();
+
+    //     return [
+    //         'Entity'     => Str::studly($entity),
+    //         'Entities'   => Str::plural(Str::studly($entity)),
+    //         'collection' => Str::plural(Str::snake($entity)),
+    //         'instance'   => Str::singular(Str::snake($entity)),
+    //         'fields'     => $this->getFieldData()
+    //     ];
+    // }
 }

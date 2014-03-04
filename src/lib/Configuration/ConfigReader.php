@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
  * Class for reading files and values from Blacksmith
  * configuration file
  */
-class ConfigReader
+class ConfigReader implements ConfigReaderInterface
 {
 
     /**

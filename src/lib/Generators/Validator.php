@@ -4,7 +4,7 @@ use Illuminate\Filesystem\Filesystem;
 use Mustache_Engine;
 use Parsers\FieldParser;
 
-class Validator extends Generator
+class Validator extends Generator implements GeneratorInterface
 {
 
     /**

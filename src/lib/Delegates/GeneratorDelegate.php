@@ -1,8 +1,9 @@
 <?php namespace Delegates;
 
 use Console\GenerateCommand;
+use Configuration\ConfigReaderInterface;
 use Configuration\ConfigReader;
-use Generators\Generator;
+use Generators\GeneratorInterface;
 use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
 use Mustache_Engine;
@@ -61,14 +62,19 @@ class GeneratorDelegate implements SingleGeneratorDelegateInterface
     /**
      * Constructor to setup up our class variables
      * 
-     * @param GenerateCommand $cmd          executed command
-     * @param ConfigReader    $cfg          reader of the config file
-     * @param Generator       $gen          generator to run
-     * @param array           $command_args command arguments
-     * @param array           $options      command options
+     * @param GenerateCommand           $cmd          executed command
+     * @param ConfigReaderInterface     $cfg          reader of the config file
+     * @param GeneratorInterface        $gen          generator to run
+     * @param array                     $command_args command arguments
+     * @param array                     $options      command options
      */
-    public function __construct(GenerateCommand $cmd, ConfigReader $cfg, Generator $gen, array $command_args, array $options = [])
-    {
+    public function __construct(
+        GenerateCommand $cmd,
+        ConfigReaderInterface $cfg,
+        GeneratorInterface $gen,
+        array $command_args,
+        array $options = []
+    ) {
         $this->command             = $cmd;
         $this->config              = $cfg;
         $this->generator           = $gen;

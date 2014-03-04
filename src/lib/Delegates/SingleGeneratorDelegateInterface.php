@@ -1,12 +1,18 @@
 <?php namespace Delegates;
 
 use Console\GenerateCommand;
-use Configuration\ConfigReader;
-use Generators\Generator;
+use Configuration\ConfigReaderInterface;
+use Generators\GeneratorInterface;
 
 interface SingleGeneratorDelegateInterface
 {
-    public function __construct(GenerateCommand $cmd, ConfigReader $cfg, Generator $gen, array $command_args, array $options = []);
+    public function __construct(
+        GenerateCommand $cmd,
+        ConfigReaderInterface $cfg,
+        GeneratorInterface $gen,
+        array $command_args,
+        array $options = []
+    );
 
     public function run();
 }
