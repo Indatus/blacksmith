@@ -57,7 +57,7 @@ trait Command {
     /**
      * Gather the dynamic options for the command.
      *
-     * @return void
+     * @return array
      */
     protected function getOptions()
     {

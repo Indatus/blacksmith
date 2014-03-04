@@ -55,14 +55,18 @@ class GenerateCommand extends \Symfony\Component\Console\Command\Command
     {
         $filesystem = new Filesystem;
 
+        //create a new generator class w/ a string
+        $generator = "Generators\\". Str::studly($this->argument('what'));
+
         /**
          * @todo Refactor this to be retrieved by a factory
          */
         $delegate = new GeneratorDelegate(
             $this,
-            new ConfigReader($filesystem, $this->argument('config_file')),
-            new Generator($filesystem, new Mustache_Engine),
-            $this->input->getArguments()
+            new ConfigReader($filesystem, (empty($this->argument('config-file')) ? null : $this->argument('config-file'))),
+            new $generator($filesystem, new Mustache_Engine),
+            $this->input->getArguments(),
+            $this->getOptions()
         );
 
         $delegate->run();

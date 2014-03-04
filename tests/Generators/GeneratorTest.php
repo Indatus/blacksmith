@@ -26,8 +26,10 @@ class GeneratorTest extends \BlacksmithTest
         $fs = m::mock('Illuminate\Filesystem\Filesystem');
         $me = m::mock('Mustache_Engine');
         $me->shouldDeferMissing();
+        $fp = m::mock('Parsers\FieldParser');
+        $fp->shouldDeferMissing();
 
-        $generator = m::mock('Generators\Generator', array($fs, $me));
+        $generator = m::mock('Generators\Generator', array($fs, $me, $fp));
         $generator->shouldDeferMissing();
 
         $generator->shouldReceive('getFileName')
@@ -72,7 +74,13 @@ class GeneratorTest extends \BlacksmithTest
             ->with($outfile)->andReturn(true);
 
         //test making a file that exists, should return false
-        $this->assertFalse($generator->make('order', $template, $destination));
+        $this->assertFalse($generator->make('order', $template, $destination, null, 'name:string'));
+
+        //assert that the field data was parsed
+        $this->assertEquals(
+            ['name' => ['type' => 'string']],
+            $generator->getFieldData()
+        );
     }
 
 
@@ -101,7 +109,10 @@ class GeneratorTest extends \BlacksmithTest
         $me = m::mock('Mustache_Engine');
         $me->shouldDeferMissing();
 
-        $generator = m::mock('Generators\Generator', array($fs, $me));
+        $fp = m::mock('Parsers\FieldParser');
+        $fp->shouldDeferMissing();
+
+        $generator = m::mock('Generators\Generator', array($fs, $me, $fp));
         $generator->shouldDeferMissing();
 
         $generator->shouldReceive('getTemplate')
@@ -132,6 +143,31 @@ class GeneratorTest extends \BlacksmithTest
             'Entities'   => 'Orders',
             'collection' => 'orders',
             'instance'   => 'order',
+            'fields'     => null,
+        ];
+
+        $this->assertEquals($expected, $generator->getTemplateVars());
+    }
+
+
+
+    public function testGetTemplateVarsForSimpleEntityWithFields()
+    {
+        $generator = m::mock('Generators\Generator');
+        $generator->shouldDeferMissing();
+
+        $generator->shouldReceive('getEntityName')->once()
+            ->andReturn('Order');
+
+        $generator->shouldReceive('getFieldData')->once()
+            ->andReturn(['name' => ['type' => 'string']]);
+
+        $expected = [
+            'Entity'     => 'Order',
+            'Entities'   => 'Orders',
+            'collection' => 'orders',
+            'instance'   => 'order',
+            'fields'     => ['name' => ['type' => 'string']],
         ];
 
         $this->assertEquals($expected, $generator->getTemplateVars());
@@ -152,6 +188,7 @@ class GeneratorTest extends \BlacksmithTest
             'Entities'   => 'EcommerceOrderCreators',
             'collection' => 'ecommerce_order_creators',
             'instance'   => 'ecommerce_order_creator',
+            'fields'     => null,
         ];
 
         $this->assertEquals($expected, $generator->getTemplateVars());
@@ -177,11 +214,14 @@ class GeneratorTest extends \BlacksmithTest
 
         $template = '/path/to/source/template.txt';
 
+        $fp = m::mock('Parsers\FieldParser');
+        $fp->shouldDeferMissing();
+
         $fs = m::mock('Illuminate\Filesystem\Filesystem');
 
         $fs->shouldReceive('get')->once()->with($template)->andReturn($templateText);
 
-        $generator = m::mock('Generators\Generator', array($fs, new Mustache_Engine));
+        $generator = m::mock('Generators\Generator', array($fs, new Mustache_Engine, $fp));
         $generator->shouldDeferMissing();
 
         $generator->shouldReceive('getEntityName')->once()

@@ -52,20 +52,29 @@ class GeneratorDelegate implements SingleGeneratorDelegateInterface
     protected $generate_for_entity;
 
     /**
+     * Options passed in for generation
+     * 
+     * @var array
+     */
+    protected $options;
+
+    /**
      * Constructor to setup up our class variables
      * 
      * @param GenerateCommand $cmd          executed command
      * @param ConfigReader    $cfg          reader of the config file
      * @param Generator       $gen          generator to run
      * @param array           $command_args command arguments
+     * @param array           $options      command options
      */
-    public function __construct(GenerateCommand $cmd, ConfigReader $cfg, Generator $gen, array $command_args)
+    public function __construct(GenerateCommand $cmd, ConfigReader $cfg, Generator $gen, array $command_args, array $options = [])
     {
         $this->command             = $cmd;
         $this->config              = $cfg;
         $this->generator           = $gen;
         $this->generate_for_entity = $command_args['entity'];
         $this->generation_request  = $command_args['what'];
+        $this->options             = $options;
     }
 
 
@@ -115,13 +124,15 @@ class GeneratorDelegate implements SingleGeneratorDelegateInterface
         $template  = $settings[ConfigReader::CONFIG_VAL_TEMPLATE];
         $directory = $settings[ConfigReader::CONFIG_VAL_DIRECTORY];
         $filename  = $settings[ConfigReader::CONFIG_VAL_FILENAME];
+        $options   = array_key_exists('fields', $this->options) ? $this->options['fields'] : [];
 
         //run generator
         $success = $this->generator->make(
             $this->generate_for_entity,
             $template,
             $directory,
-            $filename
+            $filename,
+            $options
         );
 
         if ($success) {

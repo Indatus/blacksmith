@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
+use Parsers\FieldParser;
 use Mustache_Engine;
 
 /**
@@ -27,6 +28,14 @@ class Generator
     protected $mustache;
 
     /**
+     * Field parser for parsing 
+     * field level entity data
+     * 
+     * @var Parsers\FieldParser
+     */
+    protected $fieldParser;
+
+    /**
      * Name of the file that should be written
      * 
      * @var string
@@ -41,9 +50,27 @@ class Generator
      */
     protected $entity;
 
+    /**
+     * Data about specific fields
+     * belonging to the Entity
+     *
+     * @var $array
+     */
+    protected $fieldData;
 
+    /**
+     * Var to hold the parsed template
+     * 
+     * @var string
+     */
     protected $parsedTemplate;
 
+    /**
+     * Var to hold the final filesystem
+     * destination of the template
+     * 
+     * @var string
+     */
     protected $templateDestination;
 
 
@@ -53,10 +80,11 @@ class Generator
      * @param Filesystem $filesystem
      * @param Mustache_Engine $mustache
      */
-    public function __construct(Filesystem $filesystem, Mustache_Engine $mustache)
+    public function __construct(Filesystem $filesystem, Mustache_Engine $mustache, FieldParser $fieldParser)
     {
         $this->filesystem = $filesystem;
         $this->mustache = $mustache;
+        $this->fieldParser = $fieldParser;
     }
 
 
@@ -68,13 +96,19 @@ class Generator
      * @param  string $sourceTemplate path to the raw template to work with
      * @param  string $destinationDir destination directory to write parsed template into
      * @param  string $fileName       templatized filename (not path) to write to
+     * @param  string $fieldData      data about specific fields of the entity
      * @return bool
      */
-    public function make($entity, $sourceTemplate, $destinationDir, $fileName = null)
+    public function make($entity, $sourceTemplate, $destinationDir, $fileName = null, $fieldData = null)
     {
         //set the entity we're creating for
         //later template parsing operations
         $this->entity = $entity;
+
+        //if any field data was given, parse it
+        if ($fieldData) {
+            $this->fieldData = $this->fieldParser->parse($fieldData);
+        }
 
         //set local var for template vars used for subsequent calls
         $templateVars = $this->getTemplateVars();
@@ -128,6 +162,18 @@ class Generator
 
 
     /**
+     * Function to return data about 
+     * fields for the entity
+     * 
+     * @return array
+     */
+    public function getFieldData()
+    {
+        return $this->fieldData;
+    }
+
+
+    /**
      * Function to get the minimum template variables
      * 
      * @return array
@@ -140,7 +186,8 @@ class Generator
             'Entity'     => Str::studly($entity),
             'Entities'   => Str::plural(Str::studly($entity)),
             'collection' => Str::plural(Str::snake($entity)),
-            'instance'   => Str::singular(Str::snake($entity))
+            'instance'   => Str::singular(Str::snake($entity)),
+            'fields'     => $this->getFieldData()
         ];
     }
 

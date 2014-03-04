@@ -1,0 +1,184 @@
+<?php
+
+use Services\{{Entity}}Creator;
+use Contracts\Repositories\{{Entity}}RepositoryInterface;
+use Contracts\Instances\InstanceInterface;
+use Contracts\Notification\CreatorInterface;
+use Contracts\Notification\UpdaterInterface;
+use Contracts\Notification\DestroyerInterface;
+use Validators\Validator as Validator;
+
+class {{Entities}}Controller extends BaseController implements CreatorInterface, UpdaterInterface, DestroyerInterface
+{
+
+    /**
+     * {{Entity}} Repository
+     *
+     * @var {{Entity}}RepositoryInterface
+     */
+    protected ${{instance}};
+
+    public function __construct({{Entity}}RepositoryInterface ${{instance}})
+    {
+        $this->{{instance}} = ${{instance}};
+    }
+
+    /**
+     * Display a listing of the {{collection}}.
+     *
+     * @return Response
+     */
+    public function index()
+    {
+        ${{collection}} = $this->{{instance}}->all();
+
+        return View::make('{{collection}}.index', compact('{{collection}}'));
+    }
+
+    /**
+     * Show the form for creating a new {{instance}}.
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        return View::make('{{collection}}.create');
+    }
+
+    /**
+     * Store a newly created {{instance}} in storage.
+     *
+     * @return Response
+     */
+    public function store()
+    {
+        ${{instance}}_creator = App::make('Services\{{Entities}}\{{Entity}}Creator');
+
+        return ${{instance}}_creator->create($this->{{instance}}, $this, Input::except('_token'));
+    }
+
+    /**
+     * Handle successful {{instance}} creation
+     *
+     * @param  InstanceInterface $instance
+     * @return Redirect::route
+     */
+    public function creationSucceeded(InstanceInterface $instance)
+    {
+        return Redirect::route('{{collection}}.index')->with('message', '{{Entity}} was successfully created');
+    }
+
+    /**
+     * Handle an error with {{instance}} creation
+     *
+     * @param  Validator\Validator      $validator
+     * @return Redirect::route
+     */
+    public function creationFailed(Validator $validator)
+    {
+        return Redirect::route('{{collection}}.create')
+            ->withInput()
+            ->withErrors($validator->errors())
+            ->with('message', 'Oops, there was an error');
+    }
+
+    /**
+     * Display the specified {{instance}}.
+     *
+     * @param  int      $id
+     * @return Response
+     */
+    public function show($id)
+    {
+        ${{instance}} = $this->{{instance}}->find($id);
+
+        return View::make('{{collection}}.show', compact('{{instance}}'));
+    }
+
+    /**
+     * Show the form for editing the specified {{instance}}.
+     *
+     * @param  int      $id
+     * @return Response
+     */
+    public function edit($id)
+    {
+        ${{instance}} = $this->{{instance}}->find($id);
+
+        return View::make('{{collection}}.edit', compact('{{collection}}'));
+    }
+
+    /**
+     * Update the specified {{instance}} in storage.
+     *
+     * @param  int      $id
+     * @return Response
+     */
+    public function update($id)
+    {
+        ${{instance}}_updater = App::make('Services\{{Entities}}\{{Entity}}Updater');
+
+        return ${{instance}}_updater->update($this->{{instance}}, $this, $id, Input::except('_method'));
+    }
+
+    /**
+     * Handle successful {{instance}} update
+     *
+     * @param  InstanceInterface $instance
+     * @return Redirect::route
+     */
+    public function updateSucceeded(InstanceInterface $instance)
+    {
+        return Redirect::route('{{collection}}.show', $instance->identity());
+    }
+
+    /**
+     * Handle an error with {{instance}} update
+     *
+     * @param  InstanceInterface $instance
+     * @param  Validator\Validator      $validator
+     * @return Redirect::route
+     */
+    public function updateFailed(InstanceInterface $instance, Validator $validator)
+    {
+        return Redirect::route('{{collection}}.edit', $instance->identity())
+            ->withInput()
+            ->withErrors($validator->errors())
+            ->with('message', 'Oops, there was an error');
+    }
+
+    /**
+     * Remove the specified {{instance}} from storage.
+     *
+     * @param  int      $id
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        ${{instance}}_destroyer = App::make('Services\{{Entities}}\{{Entity}}Destroyer');
+
+        return ${{instance}}_destroyer->destroy($this->{{instance}}, $this, $id, Input::except('_method'));
+    }
+
+    /**
+     * Handle successful {{instance}} destroy
+     *
+     * @param  InstanceInterface $instance
+     * @return Redirect::route
+     */
+    public function destroySucceeded(InstanceInterface $instance)
+    {
+        return Redirect::route('{{collection}}.index')->with('message', '{{Entity}} was successfully deleted');
+    }
+
+    /**
+     * Handle an error with {{instance}} destroy
+     *
+     * @param  InstanceInterface $instance
+     * @return Redirect::route
+     */
+    public function destroyFailed(InstanceInterface $instance)
+    {
+        return Redirect::route('{{collection}}.index')->with('message', 'Oops, couldn\'t delete that {{instance}}');
+    }
+}

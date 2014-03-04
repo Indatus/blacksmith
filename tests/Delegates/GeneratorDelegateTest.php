@@ -19,6 +19,8 @@ class GeneratorDelegateTest extends \BlacksmithTest
 
     private $args;
 
+    private $options;
+
     public function setUp()
     {
         parent::setUp();
@@ -31,6 +33,7 @@ class GeneratorDelegateTest extends \BlacksmithTest
             'what'        => 'model',
             'config-file' => null,
         ];
+        $this->options = [];
     }
 
 
@@ -47,7 +50,8 @@ class GeneratorDelegateTest extends \BlacksmithTest
             $this->command,
             $this->config,
             $this->generator,
-            $this->args
+            $this->args,
+            $this->options
         );
         $this->assertFalse($delegate->run());
     }
@@ -81,7 +85,8 @@ class GeneratorDelegateTest extends \BlacksmithTest
             $this->command,
             $this->config,
             $this->generator,
-            $this->args
+            $this->args,
+            $this->options
         );
         $this->assertFalse($delegate->run());
     }
@@ -118,7 +123,8 @@ class GeneratorDelegateTest extends \BlacksmithTest
                 $this->args['entity'],
                 $settings[ConfigReader::CONFIG_VAL_TEMPLATE],
                 $settings[ConfigReader::CONFIG_VAL_DIRECTORY],
-                $settings[ConfigReader::CONFIG_VAL_FILENAME]
+                $settings[ConfigReader::CONFIG_VAL_FILENAME],
+                null
             )->andReturn(true);
 
         $dest = '/path/to/dir/Output.php';
@@ -132,7 +138,8 @@ class GeneratorDelegateTest extends \BlacksmithTest
             $this->command,
             $this->config,
             $this->generator,
-            $this->args
+            $this->args,
+            $this->options
         );
         $this->assertTrue($delegate->run());
     }
@@ -170,7 +177,8 @@ class GeneratorDelegateTest extends \BlacksmithTest
                 $this->args['entity'],
                 $settings[ConfigReader::CONFIG_VAL_TEMPLATE],
                 $settings[ConfigReader::CONFIG_VAL_DIRECTORY],
-                $settings[ConfigReader::CONFIG_VAL_FILENAME]
+                $settings[ConfigReader::CONFIG_VAL_FILENAME],
+                null
             )->andReturn(false);
 
         $this->command->shouldReceive('comment')->once()
@@ -180,7 +188,8 @@ class GeneratorDelegateTest extends \BlacksmithTest
             $this->command,
             $this->config,
             $this->generator,
-            $this->args
+            $this->args,
+            $this->options
         );
         $this->assertFalse($delegate->run());
     }

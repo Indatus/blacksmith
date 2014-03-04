@@ -1,0 +1,18 @@
+<?php
+
+class {{Entities}}TableSeeder extends Seeder {
+
+    public function run()
+    {
+        // Uncomment the below to wipe the table clean before populating
+        // DB::table('{{collection}}')->truncate();
+
+        ${{collection}}} = array(
+
+        );
+
+        // Uncomment the below to run the seeder
+        // DB::table('{{collection}}')->insert(${{collection}});
+    }
+
+}
