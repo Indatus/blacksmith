@@ -13,10 +13,7 @@ class Create{{Entities}}Table extends Migration {
     public function up()
     {
         Schema::create('{{collection}}', function(Blueprint $table) {
-            $table->increments('id');
-            {{# fields }}
-  
-            {{/ fields }}
+            {{columns}}
         });
     }
 

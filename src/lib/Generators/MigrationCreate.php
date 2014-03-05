@@ -3,6 +3,8 @@
 use Illuminate\Filesystem\Filesystem;
 use Mustache_Engine;
 use Parsers\FieldParser;
+use Factories\MigrationColumnFactory;
+use Illuminate\Support\Str;
 
 class MigrationCreate extends Generator implements GeneratorInterface
 {
@@ -19,21 +21,23 @@ class MigrationCreate extends Generator implements GeneratorInterface
     }
 
 
-    // /**
-    //  * Function to get the minimum template variables
-    //  * 
-    //  * @return array
-    //  */
-    // public function getTemplateVars()
-    // {
-    //     $entity = $this->getEntityName();
+    /**
+     * Function to get the minimum template variables
+     * 
+     * @return array
+     */
+    public function getTemplateVars()
+    {
+        $entity    = $this->getEntityName();
+        $fieldData = $this->getFieldData();
 
-    //     return [
-    //         'Entity'     => Str::studly($entity),
-    //         'Entities'   => Str::plural(Str::studly($entity)),
-    //         'collection' => Str::plural(Str::snake($entity)),
-    //         'instance'   => Str::singular(Str::snake($entity)),
-    //         'fields'     => $this->getFieldData()
-    //     ];
-    // }
+        return [
+            'Entity'     => Str::studly($entity),
+            'Entities'   => Str::plural(Str::studly($entity)),
+            'collection' => Str::plural(Str::snake($entity)),
+            'instance'   => Str::singular(Str::snake($entity)),
+            'fields'     => $fieldData,
+            'columns'    => implode("\n", MigrationColumnFactory::make($fieldData))
+        ];
+    }
 }
