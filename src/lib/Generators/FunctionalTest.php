@@ -3,6 +3,7 @@
 use Illuminate\Filesystem\Filesystem;
 use Mustache_Engine;
 use Parsers\FieldParser;
+use Illuminate\Support\Str;
 
 class FunctionalTest extends Generator implements GeneratorInterface
 {
@@ -37,8 +38,8 @@ class FunctionalTest extends Generator implements GeneratorInterface
 
         //add override for specific cases like id, created_at etc
         $attributes['id'] = 1;
-        $attributes['created_at'] = "'". date('Y-m-d H:i:s') ."'";
-        $attributes['updated_at'] = "'". date('Y-m-d H:i:s') ."'";
+        $attributes['created_at'] = "'". date('Y-m-d H:00:00') ."'";
+        $attributes['updated_at'] = "'". date('Y-m-d H:00:00') ."'";
 
         $mock_attribute_rows = [];
 

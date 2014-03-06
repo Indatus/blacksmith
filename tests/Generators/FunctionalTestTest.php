@@ -18,6 +18,44 @@ class FunctionalTestTest extends \BlacksmithTest
         $this->assertInstanceOf("Generators\Generator", $instance);
     }
 
+
+
+    public function testGetTemplateVars()
+    {
+        $generator = m::mock('Generators\FunctionalTest');
+        $generator->shouldDeferMissing();
+
+        $generator->shouldReceive('getEntityName')->once()
+            ->andReturn('Order');
+
+        $fieldData = [
+            'name' => ['type' => 'string']
+        ];
+
+        $generator->shouldReceive('getFieldData')->once()
+            ->andReturn($fieldData);
+
+        $mock_attribute_rows = [
+            "'name' => 'dreamcatcher',",
+            "'id' => 1,",
+            "'created_at' => '". date('Y-m-d H:00:00') ."',",
+            "'updated_at' => '". date('Y-m-d H:00:00') ."',"
+        ];
+
+        $expected = [
+            'Entity'     => 'Order',
+            'Entities'   => 'Orders',
+            'collection' => 'orders',
+            'instance'   => 'order',
+            'fields'     => $fieldData,
+            'mock_attributes'  => $mock_attribute_rows
+        ];
+
+        $this->assertEquals($expected, $generator->getTemplateVars());
+    }
+
+
+
     public function testGetAttributeMockValue()
     {
         $g = m::mock('Generators\FunctionalTest');
