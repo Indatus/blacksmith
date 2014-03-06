@@ -1,15 +1,7 @@
 {{=<% %>=}}
+<%# form_rows %>
 <li>
-    {{ Form::label('order_number', 'Order_number:') }}
-    {{ Form::text('order_number') }}
+    <% label %>
+    <% element %>
 </li>
-
-<li>
-    {{ Form::label('amount', 'Amount:') }}
-    {{ Form::input('number', 'amount') }}
-</li>
-
-<li>
-    {{ Form::label('order_date', 'Order_date:') }}
-    {{ Form::text('order_date') }}
-</li>
+<%/ form_rows %>

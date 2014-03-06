@@ -20,6 +20,20 @@ class FormTest extends \BlacksmithTest
 
 
 
+    public function testGetElementTypes()
+    {
+        $g = m::mock('Generators\Form');
+        $g->shouldDeferMissing();
+
+        $this->assertEquals('text', $g->getElementType('string'));
+        $this->assertEquals('text', $g->getElementType('float'));
+        $this->assertEquals('text', $g->getElementType('date'));
+        $this->assertEquals('textarea', $g->getElementType('text'));
+        $this->assertEquals('checkbox', $g->getElementType('boolean'));
+    }
+
+
+
     public function testGetTemplateVars()
     {
         $generator = m::mock('Generators\Form');

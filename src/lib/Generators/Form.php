@@ -36,7 +36,7 @@ class Form extends Generator implements GeneratorInterface
             $display           = Str::title(str_replace('_', '', Str::camel($property)));
             $result['label']   = "{{ Form::label('{$property}', '{$display}:') }}";
             
-            $elementType       = "text";
+            $elementType       = $this->getElementType($meta['type']);
             $result['element'] = "{{ Form::{$elementType}('{$property}') }}";
             
             $form_rows[]       = $result;
@@ -50,5 +50,26 @@ class Form extends Generator implements GeneratorInterface
             'fields'     => $fieldData,
             'form_rows'  => $form_rows
         ];
+    }
+
+
+    /**
+     * Function to return the form element type
+     * that should be used, given the datatype input
+     * 
+     * @param  string $dataType Field data type
+     * @return string           Form element type to use
+     */
+    public function getElementType($dataType)
+    {
+        $lookup = [
+            'string'  => 'text',
+            'float'   => 'text',
+            'date'    => 'text',
+            'text'    => 'textarea',
+            'boolean' => 'checkbox'
+        ];
+
+        return array_key_exists($dataType, $lookup) ? $lookup[$dataType] : "text";
     }
 }

@@ -1,0 +1,21 @@
+<?php
+
+class {{Entity}}Test extends TestCase
+{
+
+    /**
+     * Test to ensure that the entity implements
+     * the required interfaces
+     *
+     * @return void
+     */
+    public function testInterfacesArePresent()
+    {
+        $refl = new \ReflectionClass("{{Entity}}");
+
+        $this->assertTrue(
+            $refl->implementsInterface('Contracts\Instances\InstanceInterface'),
+            '{{Entity}}} does not implement InstanceInterface'
+        );
+    }
+}
