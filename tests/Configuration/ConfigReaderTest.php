@@ -21,11 +21,16 @@ class ConfigReaderTest extends \BlacksmithTest
 
     public function testReadDefaultConfig()
     {
-        $path = realpath(__DIR__.'/../Generators/templates/hexagonal/config.json');
+        $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
         $fs = m::mock('Illuminate\Filesystem\Filesystem');
         $fs->shouldReceive('get')->once()->with($path);
 
         $reader = new ConfigReader($fs);
+
+        $this->assertEquals(
+            pathinfo($path, PATHINFO_BASENAME),
+            $reader->getConfigDirectory()
+        );
     }
 
 

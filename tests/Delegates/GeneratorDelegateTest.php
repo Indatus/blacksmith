@@ -106,9 +106,13 @@ class GeneratorDelegateTest extends \BlacksmithTest
 
         $this->config->shouldReceive('getConfigType')->once();
 
+        $baseDir = '/path/to';
+        $this->config->shouldReceive('getConfigDirectory')->once()
+            ->andReturn($baseDir);
+
         //settings to be returned by getConfigValue below
         $settings = [
-            ConfigReader::CONFIG_VAL_TEMPLATE  => '/path/to/template.txt',
+            ConfigReader::CONFIG_VAL_TEMPLATE  => 'template.txt',
             ConfigReader::CONFIG_VAL_DIRECTORY => '/path/to/dir',
             ConfigReader::CONFIG_VAL_FILENAME  => 'Output.php'
         ];
@@ -121,7 +125,7 @@ class GeneratorDelegateTest extends \BlacksmithTest
         $this->generator->shouldReceive('make')->once()
             ->with(
                 $this->args['entity'],
-                $settings[ConfigReader::CONFIG_VAL_TEMPLATE],
+                implode(DIRECTORY_SEPARATOR, [$baseDir, $settings[ConfigReader::CONFIG_VAL_TEMPLATE]]),
                 $settings[ConfigReader::CONFIG_VAL_DIRECTORY],
                 $settings[ConfigReader::CONFIG_VAL_FILENAME],
                 null
@@ -160,9 +164,13 @@ class GeneratorDelegateTest extends \BlacksmithTest
 
         $this->config->shouldReceive('getConfigType')->once();
 
+        $baseDir = "/path/to";
+        $this->config->shouldReceive('getConfigDirectory')->once()
+            ->andReturn($baseDir);
+
         //settings to be returned by getConfigValue below
         $settings = [
-            ConfigReader::CONFIG_VAL_TEMPLATE  => '/path/to/template.txt',
+            ConfigReader::CONFIG_VAL_TEMPLATE  => 'template.txt',
             ConfigReader::CONFIG_VAL_DIRECTORY => '/path/to/dir',
             ConfigReader::CONFIG_VAL_FILENAME  => 'Output.php'
         ];
@@ -175,7 +183,7 @@ class GeneratorDelegateTest extends \BlacksmithTest
         $this->generator->shouldReceive('make')->once()
             ->with(
                 $this->args['entity'],
-                $settings[ConfigReader::CONFIG_VAL_TEMPLATE],
+                implode(DIRECTORY_SEPARATOR, [$baseDir, $settings[ConfigReader::CONFIG_VAL_TEMPLATE]]),
                 $settings[ConfigReader::CONFIG_VAL_DIRECTORY],
                 $settings[ConfigReader::CONFIG_VAL_FILENAME],
                 null

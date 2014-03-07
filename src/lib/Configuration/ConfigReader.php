@@ -26,6 +26,14 @@ class ConfigReader implements ConfigReaderInterface
     protected $config = null;
 
     /**
+     * Var holding the path to the directory
+     * where the config file exists
+     * 
+     * @var string
+     */
+    protected $configDir;
+
+    /**
      * Constants for configuration keys that
      * may exist
      */
@@ -100,10 +108,12 @@ class ConfigReader implements ConfigReaderInterface
         if (!is_null($path) && $this->filesystem->exists($path)) {
 
             $this->config = json_decode($this->filesystem->get($path), true);
+            $this->configDir = pathinfo($path, PATHINFO_BASENAME);
 
         } else {
             $default = realpath(__DIR__.'/../Generators/templates/hexagonal/config.json');
-            $this->config = json_decode($this->filesystem->get($path), true);
+            $this->configDir = pathinfo($default, PATHINFO_BASENAME);
+            $this->config = json_decode($this->filesystem->get($default), true);
         }
     }
 
@@ -189,5 +199,17 @@ class ConfigReader implements ConfigReaderInterface
         }
 
         return $this->config[$key];
+    }
+
+
+    /**
+     * Function to get the directory where the config
+     * file is contained
+     * 
+     * @return string
+     */
+    public function getConfigDirectory()
+    {
+        return $this->configDir;
     }
 }

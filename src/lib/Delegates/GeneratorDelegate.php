@@ -127,7 +127,8 @@ class GeneratorDelegate implements SingleGeneratorDelegateInterface
         //should be good to generate, get the config values
         $settings  = $this->config->getConfigValue($this->generation_request);
 
-        $template  = $settings[ConfigReader::CONFIG_VAL_TEMPLATE];
+        $tplFile   = $settings[ConfigReader::CONFIG_VAL_TEMPLATE];
+        $template  = implode(DIRECTORY_SEPARATOR, [$this->config->getConfigDirectory(), $tplFile]);
         $directory = $settings[ConfigReader::CONFIG_VAL_DIRECTORY];
         $filename  = $settings[ConfigReader::CONFIG_VAL_FILENAME];
         $options   = array_key_exists('fields', $this->options) ? $this->options['fields'] : [];
