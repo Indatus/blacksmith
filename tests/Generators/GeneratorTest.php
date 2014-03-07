@@ -43,6 +43,17 @@ class GeneratorTest extends \BlacksmithTest
 
         $outfile = implode(DIRECTORY_SEPARATOR, [$destination, $file]);
 
+        $outfileDir = pathinfo($outfile, PATHINFO_DIRNAME);
+        $fs->shouldReceive('exists')
+            ->twice()
+            ->with($outfileDir)
+            ->andReturn(false);
+
+        $fs->shouldReceive('makeDirectory')
+            ->twice()
+            ->with($outfileDir, 0777, true)
+            ->andReturn(true);
+
         $fs->shouldReceive('exists')
             ->once()
             ->with($outfile)->andReturn(false);
@@ -96,6 +107,17 @@ class GeneratorTest extends \BlacksmithTest
         $outfile = implode(DIRECTORY_SEPARATOR, [$destination, $prsFileName]);
 
         $fs = m::mock('Illuminate\Filesystem\Filesystem');
+
+        $outfileDir = pathinfo($outfile, PATHINFO_DIRNAME);
+        $fs->shouldReceive('exists')
+            ->once()
+            ->with($outfileDir)
+            ->andReturn(false);
+
+        $fs->shouldReceive('makeDirectory')
+            ->once()
+            ->with($outfileDir, 0777, true)
+            ->andReturn(true);
 
         $fs->shouldReceive('exists')
             ->once()

@@ -3,7 +3,7 @@
 use Contracts\Instances\InstanceInterface;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class {{Model}} extends Eloquent implements InstanceInterface
+class {{Entity}} extends Eloquent implements InstanceInterface
 {
     protected $guarded = [];
 

@@ -20,11 +20,17 @@ class ConfigReaderFactoryTest extends \BlacksmithTest
 
     public function testMakesValidConfigReaderWithoutGivenPath()
     {
-        $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
+        $path = __DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json';
         $fs = m::mock('Illuminate\Filesystem\Filesystem');
-        $fs->shouldReceive('get')->once()->with($path);
+        $fs->shouldReceive('get')->once()->withAnyArgs();
 
         $reader = ConfigReaderFactory::make(null, $fs);
         $this->assertInstanceOf("Configuration\ConfigReaderInterface", $reader);
+
+        $dirExp = explode(DIRECTORY_SEPARATOR, $reader->getConfigDirectory());
+        $this->assertEquals(
+            'hexagonal',
+            $dirExp[count($dirExp)-1]
+        );
     }
 }

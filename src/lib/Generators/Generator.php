@@ -128,6 +128,14 @@ class Generator implements GeneratorInterface
         //find out where to write the file
         $this->templateDestination = implode(DIRECTORY_SEPARATOR, [$destinationDir, $this->getFileName()]);
 
+        //dir where template will be written
+        $templateDestinationDir = pathinfo($this->templateDestination, PATHINFO_DIRNAME);
+
+        //create directory rendered template will go into if necessary
+        if (! $this->filesystem->exists($templateDestinationDir)) {
+            $this->filesystem->makeDirectory($templateDestinationDir, 0777, true);
+        }
+
         //actually do the write operation
         if (! $this->filesystem->exists($this->templateDestination)) {
             return $this->filesystem->put($this->templateDestination, $this->parsedTemplate) !== false;

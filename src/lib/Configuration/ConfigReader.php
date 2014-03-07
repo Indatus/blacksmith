@@ -108,11 +108,11 @@ class ConfigReader implements ConfigReaderInterface
         if (!is_null($path) && $this->filesystem->exists($path)) {
 
             $this->config = json_decode($this->filesystem->get($path), true);
-            $this->configDir = pathinfo($path, PATHINFO_BASENAME);
+            $this->configDir = pathinfo($path, PATHINFO_DIRNAME);
 
         } else {
-            $default = realpath(__DIR__.'/../Generators/templates/hexagonal/config.json');
-            $this->configDir = pathinfo($default, PATHINFO_BASENAME);
+            $default = __DIR__.'/../Generators/templates/hexagonal/config.json';
+            $this->configDir = pathinfo($default, PATHINFO_DIRNAME);
             $this->config = json_decode($this->filesystem->get($default), true);
         }
     }
