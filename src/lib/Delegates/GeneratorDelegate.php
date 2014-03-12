@@ -84,7 +84,7 @@ class GeneratorDelegate implements GeneratorDelegateInterface
     ) {
         $this->command             = $cmd;
         $this->config              = $cfg;
-        $this->generator           = $genFactory->make($command_args['what']);
+        $this->generator           = @$genFactory->make($command_args['what']);
         $this->filesystem          = $filesystem;
         $this->generate_for_entity = $command_args['entity'];
         $this->generation_request  = $command_args['what'];

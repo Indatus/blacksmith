@@ -54,6 +54,7 @@ class ConfigReaderTest extends \BlacksmithTest
     }
 
 
+
     public function testGetAvailableGenerators()
     {
         $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
@@ -228,7 +229,7 @@ class ConfigReaderTest extends \BlacksmithTest
     }
 
 
-    public function testGetAvailableAggregates()
+    public function testGetAggregateValues()
     {
         $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
 
@@ -245,7 +246,7 @@ class ConfigReaderTest extends \BlacksmithTest
     }
 
 
-    public function getAvailableAggregates()
+    public function testGetAvailableAggregates()
     {
         $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
 

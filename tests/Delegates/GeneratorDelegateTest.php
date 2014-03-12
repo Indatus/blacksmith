@@ -70,18 +70,31 @@ class GeneratorDelegateTest extends \BlacksmithTest
 
     public function testRunWithInvalidGenerationRequestAndFails()
     {
+        $this->genFactory->shouldReceive('make');
+
         //change the args to have an invalid generation request
         $requested = 'something-invalid';
         $options = ['foo', 'bar', 'biz'];
 
         $this->args['what'] = $requested;
 
-        $this->genFactory
-            ->shouldReceive('make')
-            ->with($requested)
-            ->andThrow("InvalidArgumentException");
 
-        $this->setExpectedException('InvalidArgumentException');
+        $this->config->shouldReceive('validateConfig')->once()
+            ->andReturn(true);
+
+        //return possible generators that include the requested
+        $this->config->shouldReceive('getAvailableGenerators')->once()
+            ->andReturn($options);
+
+        $this->config->shouldReceive('getConfigType')->once();
+
+
+        $this->command->shouldReceive('comment')->once()
+            ->with('Error', "{$requested} is not a valid option", true);
+
+        $this->command->shouldReceive('comment')->once()
+            ->with('Error Details', "Please choose from: ". implode(", ", $options), true);
+        
         
         $delegate = new GeneratorDelegate(
             $this->command,

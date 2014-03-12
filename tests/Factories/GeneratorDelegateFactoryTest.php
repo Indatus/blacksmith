@@ -48,4 +48,23 @@ class GeneratorDelegateFactoryTest extends \BlacksmithTest
         $this->setExpectedException('InvalidArgumentException');
         $result = (new GeneratorDelegateFactory($mcrf, $mgf, $fs))->make($cmd, $args, $opts);
     }
+
+
+    public function testMakeAggregateGeneratorDelegate()
+    {
+        $cmd     = m::mock('Console\GenerateCommand');
+        $cfg     = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
+        $args    = ['entity' => 'order', 'what' => 'scaffold', 'config-file' => $cfg];
+        $opts    = ['architecture' => 'hexagonal'];
+
+        $mcrf = m::mock('Factories\ConfigReaderFactory');
+        $mcrf->shouldDeferMissing();
+        $mgf = m::mock('Factories\GeneratorFactory');
+        $mgf->shouldDeferMissing();
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldDeferMissing();
+
+        $result = (new GeneratorDelegateFactory($mcrf, $mgf, $fs))->make($cmd, $args, $opts);
+        $this->assertInstanceOf('Delegates\AggregateGeneratorDelegate', $result, 'expected AggregateGeneratorDelegate');
+    }
 }

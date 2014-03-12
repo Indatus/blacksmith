@@ -21,7 +21,7 @@ class MigrationCreate extends Generator implements GeneratorInterface
     }
 
 
-    
+
     public function make($entity, $sourceTemplate, $destinationDir, $fileName = null, $fieldData = null)
     {
         $result = parent::make($entity, $sourceTemplate, $destinationDir, $fileName, $fieldData);
@@ -30,7 +30,7 @@ class MigrationCreate extends Generator implements GeneratorInterface
             return false;
         }
 
-        $this->updateDatabaseSeederRunMethod(basename($this->getFileName(), ".php"));
+        $this->updateDatabaseSeederRunMethod(basename($this->getFileName(), ".php"), getcwd());
 
         return true;
     }
@@ -62,11 +62,12 @@ class MigrationCreate extends Generator implements GeneratorInterface
      * Function to add our specific seeder to the global
      * seeder function 
      * @param  string $className 
+     * @param  string $dir
      * @return void
      */
-    public function updateDatabaseSeederRunMethod($className)
+    public function updateDatabaseSeederRunMethod($className, $dir)
     {
-        $databaseSeederPath = implode(DIRECTORY_SEPARATOR, [getcwd(), 'database', 'seeds', 'DatabaseSeeder.php']);
+        $databaseSeederPath = implode(DIRECTORY_SEPARATOR, [$dir, 'database', 'seeds', 'DatabaseSeeder.php']);
 
         if (! $this->filesystem->exists($databaseSeederPath)) {
             return false;

@@ -6,6 +6,7 @@ use Configuration\ConfigReader;
 use Factories\GeneratorFactory;
 use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Pluralizer;
 
 /**
  * Class for delegation of application operation related
@@ -174,8 +175,10 @@ class AggregateGeneratorDelegate implements GeneratorDelegateInterface
         }//end foreach
 
         $collectionName = Str::plural(Str::snake($this->generate_for_entity));
-        $this->updateRoutesFile($collectionName);
+        $this->updateRoutesFile($collectionName, getcwd());
 
+        return true;
+        
     }//end run function
 
 
@@ -185,13 +188,14 @@ class AggregateGeneratorDelegate implements GeneratorDelegateInterface
      * for us
      * 
      * @param  string $name
+     * @param  string $dir
      * @return void
      */
-    public function updateRoutesFile($name)
+    public function updateRoutesFile($name, $dir)
     {
         $name = strtolower(Pluralizer::plural($name));
 
-        $routes = implode(DIRECTORY_SEPARATOR, [getcwd(), 'routes.php']);
+        $routes = implode(DIRECTORY_SEPARATOR, [$dir, 'routes.php']);
 
         if ($this->filesystem->exists($routes)) {
             $this->filesystem->append(
