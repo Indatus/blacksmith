@@ -14,6 +14,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Factories\GeneratorDelegateFactory;
+use Factories\ConfigReaderFactory;
+use Factories\GeneratorFactory;
+use Illuminate\Filesystem\Filesystem;
 
 /**
  * CLI command used to build a new Laravel app
@@ -48,7 +51,13 @@ class GenerateCommand extends \Symfony\Component\Console\Command\Command
      */
     protected function fire()
     {
-        $delegate = GeneratorDelegateFactory::make(
+        $generatorDelegateFactory = new GeneratorDelegateFactory(
+            new ConfigReaderFactory,
+            new GeneratorFactory,
+            new Filesystem
+        );
+        
+        $delegate = $generatorDelegateFactory->make(
             $this,
             $this->input->getArguments(),
             $this->getOptions()

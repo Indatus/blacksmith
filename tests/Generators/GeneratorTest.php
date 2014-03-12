@@ -165,7 +165,7 @@ class GeneratorTest extends \BlacksmithTest
             'Entities'   => 'Orders',
             'collection' => 'orders',
             'instance'   => 'order',
-            'fields'     => null,
+            'fields'     => [],
         ];
 
         $this->assertEquals($expected, $generator->getTemplateVars());
@@ -210,7 +210,7 @@ class GeneratorTest extends \BlacksmithTest
             'Entities'   => 'EcommerceOrderCreators',
             'collection' => 'ecommerce_order_creators',
             'instance'   => 'ecommerce_order_creator',
-            'fields'     => null,
+            'fields'     => [],
         ];
 
         $this->assertEquals($expected, $generator->getTemplateVars());

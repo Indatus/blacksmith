@@ -56,7 +56,7 @@ class Generator implements GeneratorInterface
      *
      * @var $array
      */
-    protected $fieldData;
+    protected $fieldData = [];
 
     /**
      * Var to hold the parsed template

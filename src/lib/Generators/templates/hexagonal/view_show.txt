@@ -1,5 +1,6 @@
-@extends('layouts.scaffold')
 {{=<% %>=}}
+@extends('layouts.scaffold')
+
 @section('main')
 
 <h1>Show <% Entity %></h1>
@@ -18,7 +19,7 @@
     <tbody>
         <tr>
             <%# cells %>
-            <td><% . %></td>
+            <td>{{ <%& . %> }}</td>
             <%/ cells %>
 
             <td>{{ link_to_route('<% collection %>.edit', 'Edit', array($<% instance %>->id), array('class' => 'btn btn-info')) }}</td>

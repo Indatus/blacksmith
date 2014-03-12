@@ -4,6 +4,7 @@ use Console\GenerateCommand;
 use Configuration\ConfigReaderInterface;
 use Configuration\ConfigReader;
 use Factories\GeneratorFactory;
+use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
 
 /**
@@ -11,10 +12,9 @@ use Illuminate\Filesystem\Filesystem;
  * to executing a generation request and seeing that it is 
  * completed properly
  */
-class GeneratorDelegate implements GeneratorDelegateInterface
+class AggregateGeneratorDelegate implements GeneratorDelegateInterface
 {
-
-    /**
+        /**
      * Command that delegated the request
      * 
      * @var Console\GenerateCommand
@@ -29,11 +29,12 @@ class GeneratorDelegate implements GeneratorDelegateInterface
     protected $config;
 
     /**
-     * Generator to perform the code generation
+     * Generator factory for making
+     * aggregate generators
      * 
-     * @var Generators\Generator
+     * @var Factories\GeneratorFactory
      */
-    protected $generator;
+    protected $generator_factory;
 
     /**
      * String containing the requested generation action
@@ -64,7 +65,6 @@ class GeneratorDelegate implements GeneratorDelegateInterface
      */
     protected $filesystem;
 
-
     /**
      * Constructor to setup up our class variables
      * 
@@ -84,7 +84,7 @@ class GeneratorDelegate implements GeneratorDelegateInterface
     ) {
         $this->command             = $cmd;
         $this->config              = $cfg;
-        $this->generator           = $genFactory->make($command_args['what']);
+        $this->generator_factory   = $genFactory;
         $this->filesystem          = $filesystem;
         $this->generate_for_entity = $command_args['entity'];
         $this->generation_request  = $command_args['what'];
@@ -112,12 +112,10 @@ class GeneratorDelegate implements GeneratorDelegateInterface
         }
 
         //get possible generations
-        $possible_generations = $this->config->getAvailableGenerators(
-            $this->config->getConfigType()
-        );
+        $possible_aggregates = $this->config->getAvailableAggregates();
 
         //see if passed in command is one that is available
-        if (! in_array($this->generation_request, $possible_generations)) {
+        if (! in_array($this->generation_request, $possible_aggregates)) {
             $this->command->comment(
                 'Error',
                 "{$this->generation_request} is not a valid option",
@@ -126,46 +124,80 @@ class GeneratorDelegate implements GeneratorDelegateInterface
 
             $this->command->comment(
                 'Error Details',
-                "Please choose from: ". implode(", ", $possible_generations),
+                "Please choose from: ". implode(", ", $possible_aggregates),
                 true
             );
             return false;
         }
 
-        //should be good to generate, get the config values
-        $settings  = $this->config->getConfigValue($this->generation_request);
+        //get all the generators for this aggregate
+        $generators = $this->config->getAggregateValues($this->generation_request);
 
-        $tplFile   = $settings[ConfigReader::CONFIG_VAL_TEMPLATE];
-        $template  = implode(DIRECTORY_SEPARATOR, [$this->config->getConfigDirectory(), $tplFile]);
-        $directory = $settings[ConfigReader::CONFIG_VAL_DIRECTORY];
-        $filename  = $settings[ConfigReader::CONFIG_VAL_FILENAME];
-        $options   = array_key_exists('fields', $this->options) ? $this->options['fields'] : [];
+        foreach ($generators as $to_generate) {
 
-        //run generator
-        $success = $this->generator->make(
-            $this->generate_for_entity,
-            $template,
-            $directory,
-            $filename,
-            $options
-        );
+            //get the settings, options etc.
+            $settings  = $this->config->getConfigValue($to_generate);
+            $tplFile   = $settings[ConfigReader::CONFIG_VAL_TEMPLATE];
+            $template  = implode(DIRECTORY_SEPARATOR, [$this->config->getConfigDirectory(), $tplFile]);
+            $directory = $settings[ConfigReader::CONFIG_VAL_DIRECTORY];
+            $filename  = $settings[ConfigReader::CONFIG_VAL_FILENAME];
+            $options   = array_key_exists('fields', $this->options) ? $this->options['fields'] : [];
 
-        if ($success) {
+            //create the generator
+            $generator = $this->generator_factory->make($to_generate);
 
-            $this->command->comment(
-                'Blacksmith',
-                'Success, I generated the code for you in '. $this->generator->getTemplateDestination()
+            //run generator
+            $success = $generator->make(
+                $this->generate_for_entity,
+                $template,
+                $directory,
+                $filename,
+                $options
             );
-            return true;
 
-        } else {
+            if ($success) {
 
-            $this->command->comment(
-                'Blacksmith',
-                'An unknown error occured, nothing was generated',
-                true
+                $this->command->comment(
+                    'Blacksmith',
+                    'Success, I generated the code for you in '. $generator->getTemplateDestination()
+                );
+
+            } else {
+
+                $this->command->comment(
+                    'Blacksmith',
+                    "An unknown error occured, nothing was generated for {$to_generate}",
+                    true
+                );
+            }
+
+        }//end foreach
+
+        $collectionName = Str::plural(Str::snake($this->generate_for_entity));
+        $this->updateRoutesFile($collectionName);
+
+    }//end run function
+
+
+
+    /**
+     * Function to handle updating the routes file
+     * for us
+     * 
+     * @param  string $name
+     * @return void
+     */
+    public function updateRoutesFile($name)
+    {
+        $name = strtolower(Pluralizer::plural($name));
+
+        $routes = implode(DIRECTORY_SEPARATOR, [getcwd(), 'routes.php']);
+
+        if ($this->filesystem->exists($routes)) {
+            $this->filesystem->append(
+                $routes,
+                "\n\nRoute::resource('" . $name . "', '" . ucwords($name) . "Controller');"
             );
-            return false;
         }
     }
-}
+}//end class

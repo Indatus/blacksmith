@@ -34,7 +34,7 @@ class {{Entities}}Test extends TestCase
 
         $this->attributes = [
             {{# mock_attributes }}
-            {{ . }}
+            {{{ . }}}
             {{/ mock_attributes }}
         ];
 

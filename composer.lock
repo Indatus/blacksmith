@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "440df36919f92c4ea21599153207c5c4",
+    "hash": "e2128da6d4c3cd97e0c22d54a54860d4",
     "packages": [
         {
             "name": "herrera-io/json",
@@ -174,6 +174,52 @@
             "time": "2014-01-21 23:21:16"
         },
         {
+            "name": "illuminate/container",
+            "version": "dev-master",
+            "target-dir": "Illuminate/Container",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/container.git",
+                "reference": "aad26110ba0a1577e72b9588a0441aa27cec1ddd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/container/zipball/aad26110ba0a1577e72b9588a0441aa27cec1ddd",
+                "reference": "aad26110ba0a1577e72b9588a0441aa27cec1ddd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Illuminate\\Container": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com",
+                    "homepage": "https://github.com/taylorotwell",
+                    "role": "Developer"
+                }
+            ],
+            "time": "2014-02-26 21:37:09"
+        },
+        {
             "name": "illuminate/filesystem",
             "version": "dev-master",
             "target-dir": "Illuminate/Filesystem",
@@ -228,18 +274,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "7b75bbe8bf2e22b907c6c05283870d8ee3e6ff69"
+                "reference": "e22504b78685b08edfe3744984bf58f14d778cc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/7b75bbe8bf2e22b907c6c05283870d8ee3e6ff69",
-                "reference": "7b75bbe8bf2e22b907c6c05283870d8ee3e6ff69",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/e22504b78685b08edfe3744984bf58f14d778cc1",
+                "reference": "e22504b78685b08edfe3744984bf58f14d778cc1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4.0"
             },
             "require-dev": {
+                "jeremeamia/superclosure": "1.0.*",
                 "mockery/mockery": "0.9.*",
                 "patchwork/utf8": "1.1.*",
                 "phpunit/phpunit": "3.7.*"
@@ -270,20 +317,20 @@
                     "role": "Developer"
                 }
             ],
-            "time": "2014-02-21 05:07:30"
+            "time": "2014-03-07 10:32:53"
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "1.3.5",
+            "version": "1.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/justinrainbow/json-schema.git",
-                "reference": "01949f6d2130e9737ffae5d3952909a8de70d114"
+                "reference": "d97cf3ce890fe80f247fc08594a1c8a1029fc7ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/01949f6d2130e9737ffae5d3952909a8de70d114",
-                "reference": "01949f6d2130e9737ffae5d3952909a8de70d114",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/d97cf3ce890fe80f247fc08594a1c8a1029fc7ed",
+                "reference": "d97cf3ce890fe80f247fc08594a1c8a1029fc7ed",
                 "shasum": ""
             },
             "require": {
@@ -338,7 +385,7 @@
                 "json",
                 "schema"
             ],
-            "time": "2013-12-13 15:21:04"
+            "time": "2014-03-05 15:03:52"
         },
         {
             "name": "kherge/amend",
@@ -686,12 +733,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/padraic/mockery.git",
-                "reference": "4ce6f30e60a677d2c8d26a72b672bd510cebacf0"
+                "reference": "a32c6ad986c061b40636b7da4fe30adc2a7451b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/4ce6f30e60a677d2c8d26a72b672bd510cebacf0",
-                "reference": "4ce6f30e60a677d2c8d26a72b672bd510cebacf0",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/a32c6ad986c061b40636b7da4fe30adc2a7451b5",
+                "reference": "a32c6ad986c061b40636b7da4fe30adc2a7451b5",
                 "shasum": ""
             },
             "require": {
@@ -744,7 +791,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2014-02-24 22:37:24"
+            "time": "2014-03-05 22:17:02"
         }
     ],
     "aliases": [
@@ -753,6 +800,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "illuminate/support": 20,
+        "illuminate/container": 20,
         "illuminate/filesystem": 20,
         "mustache/mustache": 20,
         "mockery/mockery": 20,

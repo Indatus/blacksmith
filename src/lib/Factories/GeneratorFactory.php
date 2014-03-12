@@ -16,7 +16,7 @@ class GeneratorFactory
      * @param  ReflectionClass  $reflectionClass used for finding out info about class to gen
      * @return Generators\GeneratorInterface
      */
-    public static function make($what, $reflectionClass = null)
+    public function make($what, $reflectionClass = null)
     {
         //use naming convention to convert the input name
         //into a fully quantified class name

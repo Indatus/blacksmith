@@ -70,17 +70,18 @@ class FunctionalTest extends Generator implements GeneratorInterface
     {
         $lookup = [
             'integer'    => 1,
-            'bigInteger' => PHP_INT_MAX,
+            'biginteger' => PHP_INT_MAX,
             'string'     => "'dreamcatcher'",
             'decimal'    => 12345.12,
             'float'      => 152853.5047,
             'timestamp'  => time(),
             'date'       => "'". date('Y-m-d') ."'",
-            'dateTime'   => "'". date('Y-m-d H:i:s') ."'",
+            'datetime'   => "'". date('Y-m-d H:i:s') ."'",
             'text'       => "'Tonx art party PBR&B, Blue Bottle sriracha Bushwick iPhone wolf kale chips Godard typewriter selfies shabby chic church-key 3 wolf moon'",
             'boolean'    => true
         ];
 
-        return array_key_exists($dataType, $lookup) ? $lookup[$dataType] : "text";
+        $key = strtolower($dataType);
+        return array_key_exists($key, $lookup) ? $lookup[$key] : "'text'";
     }
 }

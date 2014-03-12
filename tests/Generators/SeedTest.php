@@ -4,12 +4,12 @@ use Illuminate\Filesystem\Filesystem;
 use Parsers\FieldParser;
 use Mustache_Engine;
 
-class ModelTest extends \BlacksmithTest
+class SeedTest extends \BlacksmithTest
 {
 
     public function testParentClass()
     {
-        $instance = new Model(
+        $instance = new Seed(
             new Filesystem,
             new Mustache_Engine,
             new FieldParser

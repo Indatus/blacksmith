@@ -58,6 +58,8 @@ class ConfigReader implements ConfigReaderInterface
     const CONFIG_KEY_SERVICE_UPDATER   = 'service_updater';
     const CONFIG_KEY_SERVICE_DESTROYER = 'service_destroyer';
     const CONFIG_KEY_VALIDATOR         = 'validator';
+    //-------[ aggregate key names ]-----------------//
+    const CONFIG_AGG_KEY_SCAFFOLD      = 'scaffold';
 
     /**
      * Types of configs that this 
@@ -90,7 +92,33 @@ class ConfigReader implements ConfigReaderInterface
         "service_creator",
         "service_updater",
         "service_destroyer",
-        "validator",
+        "validator"
+    ];
+
+    /**
+     * aggregates that are containers
+     * for a group of multiple config keys
+     * 
+     * @var array
+     */
+    protected $aggregates = [
+        'scaffold' => [
+            "model",
+            "controller",
+            "seed",
+            "migration_create",
+            "view_create",
+            "view_update",
+            "view_show",
+            "view_index",
+            "form",
+            "unit_test",
+            "functional_test",
+            "service_creator",
+            "service_updater",
+            "service_destroyer",
+            "validator"
+        ]
     ];
 
 
@@ -180,6 +208,31 @@ class ConfigReader implements ConfigReaderInterface
     public function getConfigType()
     {
         return $this->config[static::CONFIG_TYPE_KEY];
+    }
+
+
+    /**
+     * Function to return the config keys
+     * for an aggregate
+     * 
+     * @param  string $key
+     * @return array       
+     */
+    public function getAggregateValues($key)
+    {
+        return array_key_exists($key, $this->aggregates) ? $this->aggregates[$key] : false;
+    }
+
+
+    /**
+     * Function to return the available aggregate keys
+     * 
+     * @param  string $key
+     * @return array       
+     */
+    public function getAvailableAggregates()
+    {
+        return array_keys($this->aggregates);
     }
 
 

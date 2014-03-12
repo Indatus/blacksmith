@@ -19,6 +19,8 @@ class MigrationCreateTest extends \BlacksmithTest
         $this->assertInstanceOf("Generators\Generator", $instance);
     }
 
+
+
     public function testGetTemplateVarsForSimpleEntity()
     {
         $generator = m::mock('Generators\MigrationCreate');
@@ -37,7 +39,7 @@ class MigrationCreateTest extends \BlacksmithTest
 
         $columns    = ["\$table->string('name');"];
         $columns[]  = "\$table->integer('age');";
-        $columnData = implode("\n", $columns);
+        $columnData = implode("\n\t\t\t", $columns);
 
         $expected = [
             'Entity'     => 'Order',
@@ -45,7 +47,8 @@ class MigrationCreateTest extends \BlacksmithTest
             'collection' => 'orders',
             'instance'   => 'order',
             'fields'     => $fieldData,
-            'columns'    => $columnData
+            'columns'    => $columnData,
+            'migration_timestamp' => date('Y_m_d_His')
         ];
 
         $this->assertEquals($expected, $generator->getTemplateVars());

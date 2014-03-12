@@ -33,7 +33,7 @@ class Form extends Generator implements GeneratorInterface
 
         foreach ($fieldData as $property => $meta) {
 
-            $display           = Str::title(str_replace('_', '', Str::camel($property)));
+            $display           = Str::title(str_replace('_', ' ', $property));
             $result['label']   = "{{ Form::label('{$property}', '{$display}:') }}";
             
             $elementType       = $this->getElementType($meta['type']);

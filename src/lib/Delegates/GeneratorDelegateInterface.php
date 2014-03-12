@@ -2,14 +2,16 @@
 
 use Console\GenerateCommand;
 use Configuration\ConfigReaderInterface;
-use Generators\GeneratorInterface;
+use Factories\GeneratorFactory;
+use Illuminate\Filesystem\Filesystem;
 
-interface SingleGeneratorDelegateInterface
+interface GeneratorDelegateInterface
 {
     public function __construct(
         GenerateCommand $cmd,
         ConfigReaderInterface $cfg,
-        GeneratorInterface $gen,
+        GeneratorFactory $gen,
+        Filesystem $filesystem,
         array $command_args,
         array $options = []
     );

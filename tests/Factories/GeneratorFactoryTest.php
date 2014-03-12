@@ -9,7 +9,7 @@ class GeneratorFactoryTest extends \BlacksmithTest
 
     public function testMakesValidGenerator()
     {
-        $gen = GeneratorFactory::make('model');
+        $gen = (new GeneratorFactory)->make('model');
         $this->assertInstanceOf("Generators\GeneratorInterface", $gen);
     }
 
@@ -17,7 +17,7 @@ class GeneratorFactoryTest extends \BlacksmithTest
     public function testThrowsExceptionForInvalidClass()
     {
         $this->setExpectedException('InvalidArgumentException');
-        $gen = GeneratorFactory::make('invalid');
+        $gen = (new GeneratorFactory)->make('invalid');
     }
 
 
@@ -29,6 +29,6 @@ class GeneratorFactoryTest extends \BlacksmithTest
             ->andReturn(false);
 
         $this->setExpectedException('InvalidArgumentException');
-        $gen = GeneratorFactory::make('model', $refl);
+        $gen = (new GeneratorFactory)->make('model', $refl);
     }
 }

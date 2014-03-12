@@ -14,7 +14,7 @@ class ConfigReaderFactoryTest extends \BlacksmithTest
         $fs->shouldReceive('exists')->once()->with($path)->andReturn(true);
         $fs->shouldReceive('get')->once()->with($path);
 
-        $reader = ConfigReaderFactory::make($path, $fs);
+        $reader = (new ConfigReaderFactory)->make($path, $fs);
         $this->assertInstanceOf("Configuration\ConfigReaderInterface", $reader);
     }
 
@@ -24,7 +24,7 @@ class ConfigReaderFactoryTest extends \BlacksmithTest
         $fs = m::mock('Illuminate\Filesystem\Filesystem');
         $fs->shouldReceive('get')->once()->withAnyArgs();
 
-        $reader = ConfigReaderFactory::make(null, $fs);
+        $reader = (new ConfigReaderFactory)->make(null, $fs);
         $this->assertInstanceOf("Configuration\ConfigReaderInterface", $reader);
 
         $dirExp = explode(DIRECTORY_SEPARATOR, $reader->getConfigDirectory());

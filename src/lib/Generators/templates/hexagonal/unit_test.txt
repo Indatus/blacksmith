@@ -15,7 +15,7 @@ class {{Entity}}Test extends TestCase
 
         $this->assertTrue(
             $refl->implementsInterface('Contracts\Instances\InstanceInterface'),
-            '{{Entity}}} does not implement InstanceInterface'
+            '{{Entity}} does not implement InstanceInterface'
         );
     }
 }

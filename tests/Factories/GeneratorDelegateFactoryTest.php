@@ -13,14 +13,21 @@ class GeneratorDelegateFactoryTest extends \BlacksmithTest
         $args    = ['entity' => 'order', 'what' => 'model', 'config-file' => $cfg];
         $opts    = ['architecture' => 'hexagonal'];
 
-        //test with specific
-        $result = GeneratorDelegateFactory::make($cmd, $args, $opts);
-        $this->assertInstanceOf("Delegates\SingleGeneratorDelegateInterface", $result);
+        $mcrf = m::mock('Factories\ConfigReaderFactory');
+        $mcrf->shouldDeferMissing();
+        $mgf = m::mock('Factories\GeneratorFactory');
+        $mgf->shouldDeferMissing();
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldDeferMissing();
+
+        //test with specific architecture
+        $result = (new GeneratorDelegateFactory($mcrf, $mgf, $fs))->make($cmd, $args, $opts);
+        $this->assertInstanceOf("Delegates\GeneratorDelegateInterface", $result);
         $this->assertInstanceOf("Delegates\GeneratorDelegate", $result);
 
         //test default
-        $result = GeneratorDelegateFactory::make($cmd, $args, []);
-        $this->assertInstanceOf("Delegates\SingleGeneratorDelegateInterface", $result);
+        $result = (new GeneratorDelegateFactory($mcrf, $mgf, $fs))->make($cmd, $args, []);
+        $this->assertInstanceOf("Delegates\GeneratorDelegateInterface", $result);
         $this->assertInstanceOf("Delegates\GeneratorDelegate", $result);
     }
 
@@ -31,7 +38,14 @@ class GeneratorDelegateFactoryTest extends \BlacksmithTest
         $args    = ['entity' => 'order', 'what' => 'model', 'config-file' => $cfg];
         $opts    = ['architecture' => 'invalid'];
 
+        $mcrf = m::mock('Factories\ConfigReaderFactory');
+        $mcrf->shouldDeferMissing();
+        $mgf = m::mock('Factories\GeneratorFactory');
+        $mgf->shouldDeferMissing();
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldDeferMissing();
+
         $this->setExpectedException('InvalidArgumentException');
-        $result = GeneratorDelegateFactory::make($cmd, $args, $opts);
+        $result = (new GeneratorDelegateFactory($mcrf, $mgf, $fs))->make($cmd, $args, $opts);
     }
 }

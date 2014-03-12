@@ -27,12 +27,21 @@ class GeneratorDelegateTest extends \BlacksmithTest
         $this->command = m::mock('Console\GenerateCommand');
         $this->config = m::mock('Configuration\ConfigReader');
         $this->generator = m::mock('Generators\Generator');
+        $this->genFactory = m::mock('Factories\GeneratorFactory');
+        $this->filesystem = m::mock('Illuminate\Filesystem\Filesystem');
+        $this->filesystem->shouldDeferMissing();
         $this->args = [
             'command'     => 'generate',
             'entity'      => 'Order',
             'what'        => 'model',
             'config-file' => null,
         ];
+
+        $this->genFactory
+            ->shouldReceive('make')
+            ->with($this->args['what'])
+            ->andReturn($this->generator);
+
         $this->options = [];
     }
 
@@ -49,7 +58,8 @@ class GeneratorDelegateTest extends \BlacksmithTest
         $delegate = new GeneratorDelegate(
             $this->command,
             $this->config,
-            $this->generator,
+            $this->genFactory,
+            $this->filesystem,
             $this->args,
             $this->options
         );
@@ -66,25 +76,18 @@ class GeneratorDelegateTest extends \BlacksmithTest
 
         $this->args['what'] = $requested;
 
-        $this->config->shouldReceive('validateConfig')->once()
-            ->andReturn(true);
+        $this->genFactory
+            ->shouldReceive('make')
+            ->with($requested)
+            ->andThrow("InvalidArgumentException");
 
-        //return possible generators that don't include the requested
-        $this->config->shouldReceive('getAvailableGenerators')->once()
-            ->andReturn($options);
-
-        $this->config->shouldReceive('getConfigType')->once();
-
-        $this->command->shouldReceive('comment')->once()
-            ->with('Error', "{$requested} is not a valid option", true);
-
-        $this->command->shouldReceive('comment')->once()
-            ->with('Error Details', "Please choose from: ". implode(", ", $options), true);
-
+        $this->setExpectedException('InvalidArgumentException');
+        
         $delegate = new GeneratorDelegate(
             $this->command,
             $this->config,
-            $this->generator,
+            $this->genFactory,
+            $this->filesystem,
             $this->args,
             $this->options
         );
@@ -141,7 +144,8 @@ class GeneratorDelegateTest extends \BlacksmithTest
         $delegate = new GeneratorDelegate(
             $this->command,
             $this->config,
-            $this->generator,
+            $this->genFactory,
+            $this->filesystem,
             $this->args,
             $this->options
         );
@@ -195,7 +199,8 @@ class GeneratorDelegateTest extends \BlacksmithTest
         $delegate = new GeneratorDelegate(
             $this->command,
             $this->config,
-            $this->generator,
+            $this->genFactory,
+            $this->filesystem,
             $this->args,
             $this->options
         );

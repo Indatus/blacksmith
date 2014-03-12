@@ -7,7 +7,7 @@ class {{Entities}}TableSeeder extends Seeder {
         // Uncomment the below to wipe the table clean before populating
         // DB::table('{{collection}}')->truncate();
 
-        ${{collection}}} = array(
+        ${{collection}} = array(
 
         );
 

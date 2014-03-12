@@ -21,7 +21,7 @@
             @foreach ($<% collection %> as $<% instance %>)
                 <tr>
                     <%# cells %>
-                    <td><% . %></td>
+                    <td>{{ <%& . %> }}</td>
                     <%/ cells %>
 
                     <td>{{ link_to_route('<% collection %>.show', 'View', array($<% instance %>->id), array('class' => 'btn')) }}</td>

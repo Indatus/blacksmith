@@ -226,4 +226,55 @@ class ConfigReaderTest extends \BlacksmithTest
         $result = $reader->getConfigValue('something-invalid');
         $this->assertFalse($result);
     }
+
+
+    public function testGetAvailableAggregates()
+    {
+        $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
+
+        $json = file_get_contents($path);
+
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldReceive('get')->once()->withAnyArgs()
+            ->andReturn($json);
+
+        $reader = new ConfigReader($fs);
+        $result = $reader->getAggregateValues(ConfigReader::CONFIG_AGG_KEY_SCAFFOLD);
+        
+        $this->assertTrue(is_array($result));
+    }
+
+
+    public function getAvailableAggregates()
+    {
+        $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
+
+        $json = file_get_contents($path);
+
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldReceive('get')->once()->withAnyArgs()
+            ->andReturn($json);
+
+        $reader = new ConfigReader($fs);
+        $result = $reader->getAvailableAggregates();
+        
+        $this->assertEquals(['scaffold'], $result);
+    }
+
+
+
+    public function testGetAggregateShoulFail()
+    {
+        $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
+
+        $json = file_get_contents($path);
+
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldReceive('get')->once()->withAnyArgs()
+            ->andReturn($json);
+
+        $reader = new ConfigReader($fs);
+        $result = $reader->getAggregateValues('something-invalid');
+        $this->assertFalse($result);
+    }
 }
