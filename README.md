@@ -1,8 +1,8 @@
 # Blacksmith
 
-<p align="left">
-<img height="300" src="https://s3-us-west-2.amazonaws.com/oss-avatars/blacksmith_round_readme.png">
-</p>
+
+<img height="300" align="left" src="https://s3-us-west-2.amazonaws.com/oss-avatars/blacksmith_round_readme.png">
+
 
 Blacksmith is a Laravel code generation tool which automates the creation of common files that you'd typically create for each entity in your application.
 
