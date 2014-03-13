@@ -1,7 +1,7 @@
 [
     {
         "name": "blacksmith.phar",
-        "sha1": "sha1-goes-here",
+        "sha1": "a408f3a23665b4fe2268f304bb569a22d788c799",
         "url": "https://raw.github.com/indatus/blacksmith/v1.0.0/blacksmith.phar",
         "version": "1.0.0"
     }
