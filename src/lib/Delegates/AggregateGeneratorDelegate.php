@@ -195,7 +195,7 @@ class AggregateGeneratorDelegate implements GeneratorDelegateInterface
     {
         $name = strtolower(Pluralizer::plural($name));
 
-        $routes = implode(DIRECTORY_SEPARATOR, [$dir, 'routes.php']);
+        $routes = implode(DIRECTORY_SEPARATOR, [$dir, 'app', 'routes.php']);
 
         if ($this->filesystem->exists($routes)) {
             $this->filesystem->append(

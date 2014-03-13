@@ -67,7 +67,7 @@ class MigrationCreate extends Generator implements GeneratorInterface
      */
     public function updateDatabaseSeederRunMethod($className, $dir)
     {
-        $databaseSeederPath = implode(DIRECTORY_SEPARATOR, [$dir, 'database', 'seeds', 'DatabaseSeeder.php']);
+        $databaseSeederPath = implode(DIRECTORY_SEPARATOR, [$dir, 'app', 'database', 'seeds', 'DatabaseSeeder.php']);
 
         if (! $this->filesystem->exists($databaseSeederPath)) {
             return false;

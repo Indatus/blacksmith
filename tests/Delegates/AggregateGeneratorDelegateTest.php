@@ -289,7 +289,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
     {
         $name = 'orders';
         $dir = '/some/path';
-        $routes = implode(DIRECTORY_SEPARATOR, [$dir, 'routes.php']);
+        $routes = implode(DIRECTORY_SEPARATOR, [$dir, 'app', 'routes.php']);
         $data = "\n\nRoute::resource('" . $name . "', '" . ucwords($name) . "Controller');";
 
         $this->filesystem->shouldReceive('exists')->once()

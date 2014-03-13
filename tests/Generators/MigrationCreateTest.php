@@ -111,7 +111,7 @@ class MigrationCreateTest extends \BlacksmithTest
         $me = m::mock('Mustache_Engine');
         $fp = m::mock('Parsers\FieldParser');
         $dir = '/some/path/name';
-        $path = implode(DIRECTORY_SEPARATOR, [$dir, 'database', 'seeds', 'DatabaseSeeder.php']);
+        $path = implode(DIRECTORY_SEPARATOR, [$dir, 'app', 'database', 'seeds', 'DatabaseSeeder.php']);
         $className = "OrderSeeder";
 
         //test file not found
