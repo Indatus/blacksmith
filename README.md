@@ -69,7 +69,7 @@ The simplest method of installation is to simply [download the blacksmith.phar](
 
 <a name="mv-easy-access" />
 > **(Optional) Move and set permissions**
-Now if you'd like you can move the PHAR to `/usr/local/bin` as `blacksmith` for easy access. You may need to grant the file execution privileges (`chmod +x`) before running commands.
+Now if you'd like you can move the PHAR to `/usr/local/bin` and rename it to `blacksmith` for easy access. You may need to grant the file execution privileges (`chmod +x`) before running commands.
 
 <a name="install-compile" />
 ### Compile from source
