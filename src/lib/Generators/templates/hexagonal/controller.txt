@@ -105,7 +105,7 @@ class {{Entities}}Controller extends BaseController implements CreatorInterface,
     {
         ${{instance}} = $this->{{instance}}->find($id);
 
-        return View::make('{{collection}}.edit', compact('{{collection}}'));
+        return View::make('{{collection}}.edit', compact('{{instance}}'));
     }
 
     /**
