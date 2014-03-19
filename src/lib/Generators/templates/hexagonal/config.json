@@ -75,5 +75,15 @@
         "template": "validator.txt",
         "directory": "app/lib/Validators",
         "filename": "{{Entity}}Validator.php"
+    },
+    "repository_interface": {
+        "template": "repository_interface.txt",
+        "directory": "app/lib/Contracts/Repositories",
+        "filename": "{{Entity}}RepositoryInterface.php"
+    },
+    "db_repository": {
+        "template": "db_repository.txt",
+        "directory": "app/lib/Repositories",
+        "filename": "Db{{Entity}}Repository.php"
     }
 }

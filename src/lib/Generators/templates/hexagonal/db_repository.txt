@@ -1,0 +1,12 @@
+<?php namespace Repositories;
+
+use Contracts\Repositories\{{Entity}}RepositoryInterface;
+use {{Entity}};
+
+class Db{{Entity}}Repository extends DbRepository implements {{Entity}}RepositoryInterface
+{
+    public function __construct({{Entity}} $model)
+    {
+        $this->model = $model;
+    }
+}

@@ -58,6 +58,8 @@ class ConfigReader implements ConfigReaderInterface
     const CONFIG_KEY_SERVICE_UPDATER   = 'service_updater';
     const CONFIG_KEY_SERVICE_DESTROYER = 'service_destroyer';
     const CONFIG_KEY_VALIDATOR         = 'validator';
+    const CONFIG_KEY_IREPOSITORY       = 'repository_interface';
+    const CONFIG_KEY_DB_REPOSITORY     = 'db_repository';
     //-------[ aggregate key names ]-----------------//
     const CONFIG_AGG_KEY_SCAFFOLD      = 'scaffold';
 
@@ -92,7 +94,9 @@ class ConfigReader implements ConfigReaderInterface
         "service_creator",
         "service_updater",
         "service_destroyer",
-        "validator"
+        "validator",
+        "repository_interface",
+        "db_repository"
     ];
 
     /**
@@ -117,7 +121,9 @@ class ConfigReader implements ConfigReaderInterface
             "service_creator",
             "service_updater",
             "service_destroyer",
-            "validator"
+            "validator",
+            "repository_interface",
+            "db_repository"
         ]
     ];
 
