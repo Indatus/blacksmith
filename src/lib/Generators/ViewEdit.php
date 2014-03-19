@@ -4,7 +4,7 @@ use Illuminate\Filesystem\Filesystem;
 use Mustache_Engine;
 use Parsers\FieldParser;
 
-class ViewUpdate extends Generator implements GeneratorInterface
+class ViewEdit extends Generator implements GeneratorInterface
 {
 
     /**

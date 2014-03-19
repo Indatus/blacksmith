@@ -4,12 +4,12 @@ use Illuminate\Filesystem\Filesystem;
 use Parsers\FieldParser;
 use Mustache_Engine;
 
-class ViewUpdateTest extends \BlacksmithTest
+class ViewEditTest extends \BlacksmithTest
 {
 
     public function testParentClass()
     {
-        $instance = new ViewUpdate(
+        $instance = new ViewEdit(
             new Filesystem,
             new Mustache_Engine,
             new FieldParser

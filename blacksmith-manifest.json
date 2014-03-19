@@ -22,5 +22,11 @@
         "sha1": "80463b6ead45365168fc1aea5d1fce9d0cfc9edd",
         "url": "https://raw.github.com/indatus/blacksmith/v1.1.2/blacksmith.phar",
         "version": "1.1.2"
+    },
+    {
+        "name": "blacksmith.phar",
+        "sha1": "77bcd4be4de643dbd52f42b7c8da640b78ab611c",
+        "url": "https://raw.github.com/indatus/blacksmith/v1.1.3/blacksmith.phar",
+        "version": "1.1.3"
     }
 ]

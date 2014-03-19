@@ -14,7 +14,7 @@
 {{ Form::open(array('route' => '<% collection %>.store')) }}
     <ul>
         
-        @include('<% collection %>.form')
+        @include('<% collection %>._form')
 
         <li>
             {{ Form::submit('Submit', array('class' => 'btn btn-info')) }}

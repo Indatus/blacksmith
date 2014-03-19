@@ -26,10 +26,10 @@
         "directory": "app/views/{{collection}}",
         "filename": "create.blade.php"
     },
-    "view_update": {
-        "template": "view_update.txt",
+    "view_edit": {
+        "template": "view_edit.txt",
         "directory": "app/views/{{collection}}",
-        "filename": "update.blade.php"
+        "filename": "edit.blade.php"
     },
     "view_show": {
         "template": "view_show.txt",

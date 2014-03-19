@@ -14,7 +14,7 @@
 {{ Form::model($<%instance%>, array('method' => 'PATCH', 'route' => array('<% collection %>.update', $<% instance %>->id))) }}
     <ul>
         
-        @include('<% collection %>.form')
+        @include('<% collection %>._form')
 
         <li>
             {{ Form::submit('Update', array('class' => 'btn btn-info')) }}

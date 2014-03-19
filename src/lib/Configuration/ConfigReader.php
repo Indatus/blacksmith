@@ -48,7 +48,7 @@ class ConfigReader implements ConfigReaderInterface
     const CONFIG_KEY_SEED              = 'seed';
     const CONFIG_KEY_MIGRATION_CREATE  = 'migration_create';
     const CONFIG_KEY_VIEW_CREATE       = 'view_create';
-    const CONFIG_KEY_VIEW_UPDATE       = 'view_update';
+    const CONFIG_KEY_VIEW_EDIT         = 'view_edit';
     const CONFIG_KEY_VIEW_SHOW         = 'view_show';
     const CONFIG_KEY_VIEW_INDEX        = 'view_index';
     const CONFIG_KEY_FORM              = 'form';
@@ -85,7 +85,7 @@ class ConfigReader implements ConfigReaderInterface
         "seed",
         "migration_create",
         "view_create",
-        "view_update",
+        "view_edit",
         "view_show",
         "view_index",
         "form",
@@ -112,7 +112,7 @@ class ConfigReader implements ConfigReaderInterface
             "seed",
             "migration_create",
             "view_create",
-            "view_update",
+            "view_edit",
             "view_show",
             "view_index",
             "form",
