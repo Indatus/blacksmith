@@ -2,7 +2,7 @@
 <?php
 
 require __DIR__.'/../src/vendor/autoload.php';
-$app = new Symfony\Component\Console\Application('Blacksmith', '1.0.0');
+$app = new Symfony\Component\Console\Application('Blacksmith', '1.1.2');
 $app->add(new Console\GenerateCommand);
 
 $updateCommand = new KevinGH\Amend\Command('self-update');
