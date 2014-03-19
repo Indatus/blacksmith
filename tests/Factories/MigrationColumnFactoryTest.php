@@ -12,7 +12,10 @@ class MigrationColumnFactoryTest extends \BlacksmithTest
             'name' => ['type' => 'string']
         ];
 
-        $output = ["\$table->string('name');"];
+        $output   = [];
+        $output[] = "\$table->increments('id');";
+        $output[] = "\$table->string('name');";
+        $output[] = "\$table->timestamps();";
 
         $this->assertEquals($output, MigrationColumnFactory::make($input));
     }
@@ -25,8 +28,11 @@ class MigrationColumnFactoryTest extends \BlacksmithTest
             'age'  => ['type' => 'integer']
         ];
 
-        $output   = ["\$table->string('name');"];
+        $output   = [];
+        $output[] = "\$table->increments('id');";
+        $output[] = "\$table->string('name');";
         $output[] = "\$table->integer('age');";
+        $output[] = "\$table->timestamps();";
 
         $this->assertEquals($output, MigrationColumnFactory::make($input));
     }
@@ -39,8 +45,11 @@ class MigrationColumnFactoryTest extends \BlacksmithTest
             'age'  => ['type' => 'integer']
         ];
 
-        $output   = ["\$table->string('name')->nullable();"];
+        $output   = [];
+        $output[] = "\$table->increments('id');";
+        $output[] = "\$table->string('name')->nullable();";
         $output[] = "\$table->integer('age');";
+        $output[] = "\$table->timestamps();";
 
         $this->assertEquals($output, MigrationColumnFactory::make($input));
     }
@@ -56,7 +65,10 @@ class MigrationColumnFactoryTest extends \BlacksmithTest
             ]
         ];
 
-        $output = ["\$table->string('name', 15)->nullable();"];
+        $output = [];
+        $output[] = "\$table->increments('id');";
+        $output[] = "\$table->string('name', 15)->nullable();";
+        $output[] = "\$table->timestamps();";
 
         $this->assertEquals($output, MigrationColumnFactory::make($input));
     }
@@ -74,8 +86,11 @@ class MigrationColumnFactoryTest extends \BlacksmithTest
             ]
         ];
 
-        $output   = ["\$table->double('average', 15,8)->nullable()->default(10);"];
+        $output   = [];
+        $output[] = "\$table->increments('id');";
+        $output[] = "\$table->double('average', 15,8)->nullable()->default(10);";
         $output[] = "\$table->integer('age');";
+        $output[] = "\$table->timestamps();";
 
         $this->assertEquals($output, MigrationColumnFactory::make($input));
     }

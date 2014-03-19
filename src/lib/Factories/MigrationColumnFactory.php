@@ -37,6 +37,10 @@ class MigrationColumnFactory
             $schema[] = $this->addColumn($property, $details);
         }
 
+        //add increments and timestamps
+        array_unshift($schema, "\$table->increments('id');");
+        array_push($schema, "\$table->timestamps();");
+
         return $schema;
     }
 
