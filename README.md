@@ -4,9 +4,9 @@
 <img height="300" align="left" src="https://s3-us-west-2.amazonaws.com/oss-avatars/blacksmith_round_readme.png">
 
 
-Blacksmith is a Laravel code generation tool which automates the creation of common files that you'd typically create for each entity in your application.
+Blacksmith is a code generation tool which automates the creation of common files that you'd typically create for each entity in your application.
 
-Blacksmith does not actually *depend* on Laravel or extend an Artisan task, it is stand alone.  This allows you to use it for code generation from a template anywhere on your filesystem.  In fact, while some of the [generator specific template variables](#specific-template-variables) and post-generation tasks of the [Intelligent Laravel Generators](#intelligent-generators) are Laravel specific; if the code you want to generate uses studly case and snake case naming, you could generate any code you wanted: Java, JavaScript etc.
+Blacksmith works nicely with the [Laravel](http://laravel.com) PHP framework but does not actually *depend* on Laravel or extend an Artisan task, it is stand alone.  This allows you to use it for code generation from a template anywhere on your filesystem.  In fact, while some of the [generator specific template variables](#specific-template-variables) and post-generation tasks of the [Intelligent Laravel Generators](#intelligent-generators) are Laravel specific; if the code you want to generate uses studly case and snake case naming, you could generate any code you wanted: Java, JavaScript etc.
 
 ---
 
