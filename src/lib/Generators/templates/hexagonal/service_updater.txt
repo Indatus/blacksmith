@@ -7,6 +7,9 @@ use Validators\{{Entity}}Validator;
 class {{Entity}}Updater
 {
 
+    /**
+     * @param {{Entity}}Validator $validator
+     */
     protected $validator;
 
     /**
