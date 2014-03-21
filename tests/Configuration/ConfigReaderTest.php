@@ -53,6 +53,26 @@ class ConfigReaderTest extends \BlacksmithTest
         $this->assertTrue($reader->validateConfig());
     }
 
+    public function testSkippedConfigKey()
+    {
+        $path = realpath(__DIR__.'/../../src/lib/Generators/templates/hexagonal/config.json');
+
+        $json = file_get_contents($path);
+
+        //replace existing config value with false
+        $json = preg_replace('/("view_show.*\{.*(\n.*)+?\n.+\},)/', '"view_show": false,', $json);
+
+        $configArr = json_decode($json, true);
+
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldReceive('get')->once()->withAnyArgs()
+            ->andReturn($json);
+
+        $reader = new ConfigReader($fs);
+
+        $this->assertTrue($reader->validateConfig());
+    }
+
 
 
     public function testGetAvailableGenerators()

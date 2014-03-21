@@ -138,6 +138,14 @@ class AggregateGeneratorDelegate implements GeneratorDelegateInterface
 
             //get the settings, options etc.
             $settings  = $this->config->getConfigValue($to_generate);
+            if ($settings === false) {
+                $this->command->comment(
+                    'Blacksmith',
+                    'I skipped "'.$to_generate.'"'
+                );
+                continue;
+            }
+
             $tplFile   = $settings[ConfigReader::CONFIG_VAL_TEMPLATE];
             $template  = implode(DIRECTORY_SEPARATOR, [$this->config->getConfigDirectory(), $tplFile]);
             $directory = $settings[ConfigReader::CONFIG_VAL_DIRECTORY];
@@ -167,7 +175,7 @@ class AggregateGeneratorDelegate implements GeneratorDelegateInterface
 
                 $this->command->comment(
                     'Blacksmith',
-                    "An unknown error occured, nothing was generated for {$to_generate}",
+                    "An unknown error occurred, nothing was generated for {$to_generate}",
                     true
                 );
             }

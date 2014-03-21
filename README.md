@@ -154,6 +154,12 @@ The key take away here is that for each singular generator there are sub element
 
 > **Note:** if the destination directories do not exist Blacksmith will create them.
 
+To skip a generator, set it's configuration to `false`.  This can be useful to skip generating views when you're building an API.
+
+```json
+    "migration_create": false,
+```
+
 You can also see in the [partial config file](#example-config) example that you can use [template variables](#template-variables) provided by the generator in both the *directory* and *filename* values of the configuration.
 
 <a name="templates" />
