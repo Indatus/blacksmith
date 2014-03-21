@@ -1,5 +1,6 @@
 <?php namespace Generators;
 
+use DateTime;
 use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
 use Parsers\FieldParser;
