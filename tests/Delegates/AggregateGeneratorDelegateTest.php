@@ -123,25 +123,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
     public function testRunWithValidArgumentsShouldSucceed()
     {
         //mock valid options
-        $options = [
-            'scaffold' => [
-                "model",
-                "controller",
-                "seed",
-                "migration_create",
-                "view_create",
-                "view_update",
-                "view_show",
-                "view_index",
-                "form",
-                "unit_test",
-                "functional_test",
-                "service_creator",
-                "service_updater",
-                "service_destroyer",
-                "validator"
-            ]
-        ];
+        $options = $this->getValidOptions();
         $cnt = count($options['scaffold']);
 
         $this->config->shouldReceive('validateConfig')->once()
@@ -201,29 +183,85 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
     }
 
 
+    public function testRunWithFalseArgumentsShouldSucceed()
+    {
+        //mock valid options
+        $options = $this->getValidOptions();
+
+        $cnt = count($options['scaffold']);
+
+        $this->config->shouldReceive('validateConfig')->once()
+            ->andReturn(true);
+
+        //return possible aggregates that include the requested
+        $this->config->shouldReceive('getAvailableAggregates')->once()
+            ->andReturn(array_keys($options));
+
+        $this->config->shouldReceive('getAggregateValues')->once()
+            ->with('scaffold')
+            ->andReturn($options['scaffold']);
+
+        $baseDir = '/path/to';
+        $this->config->shouldReceive('getConfigDirectory')->times($cnt)
+            ->andReturn($baseDir);
+
+        //settings to be returned by getConfigValue below
+        $settings = [
+            ConfigReader::CONFIG_VAL_TEMPLATE  => 'template.txt',
+            ConfigReader::CONFIG_VAL_DIRECTORY => '/path/to/dir',
+            ConfigReader::CONFIG_VAL_FILENAME  => 'Output.php'
+        ];
+
+        $options['scaffold']['view_show'] = false;
+        foreach ($options['scaffold'] as $idx => $to_generate) {
+            $configValue = $settings;
+            if ($to_generate === false) {
+                $this->command->shouldReceive('comment')
+                    ->with(
+                        "Blacksmith",
+                        "I skipped \"".$to_generate.'"',
+                        true
+                    );
+                continue;
+            }
+
+            $this->config->shouldReceive('getConfigValue')
+                ->withAnyArgs()
+                ->andReturn($configValue);
+
+            $this->genFactory->shouldReceive('make')->once()
+                ->with($to_generate)
+                ->andReturn($this->generator);
+
+            //mock call to generator->make()
+            $this->generator->shouldReceive('make')
+                ->withAnyArgs()->andReturn(true);
+
+            $dest = '/path/to/dir/Output.php';
+            $this->generator->shouldReceive('getTemplateDestination')
+                ->andReturn($dest);
+
+            $this->command->shouldReceive('comment')->withAnyArgs();
+
+        }//end foreach
+
+        $delegate = new AggregateGeneratorDelegate(
+            $this->command,
+            $this->config,
+            $this->genFactory,
+            $this->filesystem,
+            $this->args,
+            $this->options
+        );
+        $this->assertTrue($delegate->run());
+    }
+
+
 
     public function testRunWithValidArgumentsShouldFail()
     {
         //mock valid options
-        $options = [
-            'scaffold' => [
-                "model",
-                "controller",
-                "seed",
-                "migration_create",
-                "view_create",
-                "view_update",
-                "view_show",
-                "view_index",
-                "form",
-                "unit_test",
-                "functional_test",
-                "service_creator",
-                "service_updater",
-                "service_destroyer",
-                "validator"
-            ]
-        ];
+        $options = $this->getValidOptions();
         $cnt = count($options['scaffold']);
 
         $this->config->shouldReceive('validateConfig')->once()
@@ -267,7 +305,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
             $this->command->shouldReceive('comment')
                 ->with(
                     "Blacksmith",
-                    "An unknown error occured, nothing was generated for {$to_generate}",
+                    "An unknown error occurred, nothing was generated for {$to_generate}",
                     true
                 );
 
@@ -308,5 +346,28 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
             $this->options
         );
         $delegate->updateRoutesFile($name, $dir);
+    }
+
+    private function getValidOptions()
+    {
+        return [
+                'scaffold' => [
+                    "model",
+                    "controller",
+                    "seed",
+                    "migration_create",
+                    "view_create",
+                    "view_update",
+                    "view_show",
+                    "view_index",
+                    "form",
+                    "unit_test",
+                    "functional_test",
+                    "service_creator",
+                    "service_updater",
+                    "service_destroyer",
+                    "validator"
+                ]
+            ];
     }
 }

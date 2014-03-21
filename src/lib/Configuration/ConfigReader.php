@@ -170,6 +170,10 @@ class ConfigReader implements ConfigReaderInterface
                 return false;
             }
 
+            if ($this->config[$key] === false) {
+                continue;
+            }
+
             if (! array_key_exists(static::CONFIG_VAL_TEMPLATE, $this->config[$key])) {
                 return false;
             }
