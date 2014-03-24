@@ -39,6 +39,7 @@ class GenerateCommand extends \Symfony\Component\Console\Command\Command
 
         $this->setName('generate')
                 ->setDescription('Commission Blacksmith to generate some code for you')
+                ->addOption('f', 'force', InputOption::VALUE_NONE, 'If present, any existing files will be overridden')
                 ->addArgument('entity', InputArgument::REQUIRED, "Name of the associated entity your generating for")
                 ->addArgument('what', InputArgument::REQUIRED, "What do you want to generate")
                 ->addArgument('config-file', InputArgument::OPTIONAL, "Blacksmith config file");
@@ -56,7 +57,7 @@ class GenerateCommand extends \Symfony\Component\Console\Command\Command
             new GeneratorFactory,
             new Filesystem
         );
-        
+
         $delegate = $generatorDelegateFactory->make(
             $this,
             $this->input->getArguments(),
