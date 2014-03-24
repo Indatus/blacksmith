@@ -1,5 +1,6 @@
 <?php namespace Generators;
 
+use DateTime;
 use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
 use Parsers\FieldParser;
@@ -195,7 +196,8 @@ class Generator implements GeneratorInterface
             'Entities'   => Str::plural(Str::studly($entity)),
             'collection' => Str::plural(Str::snake($entity)),
             'instance'   => Str::singular(Str::snake($entity)),
-            'fields'     => $this->getFieldData()
+            'fields'     => $this->getFieldData(),
+            'year'       => (new DateTime())->format('Y')
         ];
     }
 

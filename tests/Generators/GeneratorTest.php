@@ -1,6 +1,7 @@
 <?php namespace Generators;
 
 
+use DateTime;
 use Generators\Generator;
 use Illuminate\Filesystem\Filesystem;
 use Mustache_Engine;
@@ -166,6 +167,7 @@ class GeneratorTest extends \BlacksmithTest
             'collection' => 'orders',
             'instance'   => 'order',
             'fields'     => [],
+            'year'       => (new DateTime())->format('Y')
         ];
 
         $this->assertEquals($expected, $generator->getTemplateVars());
@@ -190,6 +192,7 @@ class GeneratorTest extends \BlacksmithTest
             'collection' => 'orders',
             'instance'   => 'order',
             'fields'     => ['name' => ['type' => 'string']],
+            'year'       => (new DateTime())->format('Y')
         ];
 
         $this->assertEquals($expected, $generator->getTemplateVars());
@@ -211,6 +214,7 @@ class GeneratorTest extends \BlacksmithTest
             'collection' => 'ecommerce_order_creators',
             'instance'   => 'ecommerce_order_creator',
             'fields'     => [],
+            'year'       => (new DateTime())->format('Y')
         ];
 
         $this->assertEquals($expected, $generator->getTemplateVars());
