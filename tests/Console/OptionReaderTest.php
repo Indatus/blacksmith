@@ -18,6 +18,7 @@ class OptionReaderTest extends \BlacksmithTest
     public function testFieldsDefault()
     {
         $optionReader = new OptionReader([]);
+        $this->assertFalse($optionReader->isGenerationForced());
         $this->assertEquals($optionReader->getFields(), []);
     }
 }
