@@ -10,7 +10,10 @@ class OptionReaderTest extends \BlacksmithTest
 
     public function testFields()
     {
-        $optionReader = new OptionReader(['f', 'fields="username:string:unique, age:integer:nullable"']);
+        $optionReader = new OptionReader([
+                'f',
+                'fields' => 'username:string:unique, age:integer:nullable'
+            ]);
         $this->assertTrue($optionReader->isGenerationForced());
         $this->assertEquals($optionReader->getFields(), 'username:string:unique, age:integer:nullable');
     }
