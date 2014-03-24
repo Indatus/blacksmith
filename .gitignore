@@ -7,4 +7,5 @@ tests/meta
 /bin/hot-phpunit-runner
 /bin/jsonlint
 /bin/validate-json
+.idea
 .DS_Store

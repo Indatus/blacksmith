@@ -20,6 +20,7 @@ class {{Entities}}Controller extends BaseController implements CreatorInterface,
 
     public function __construct({{Entity}}RepositoryInterface ${{instance}})
     {
+        parent::__construct();
         $this->{{instance}} = ${{instance}};
     }
 
