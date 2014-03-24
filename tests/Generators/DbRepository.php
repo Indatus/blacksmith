@@ -3,6 +3,7 @@
 use Illuminate\Filesystem\Filesystem;
 use Parsers\FieldParser;
 use Mustache_Engine;
+use Mockery as m;
 
 class DbRepositoryTest extends \BlacksmithTest
 {
@@ -12,7 +13,8 @@ class DbRepositoryTest extends \BlacksmithTest
         $instance = new DbRepository(
             new Filesystem,
             new Mustache_Engine,
-            new FieldParser
+            new FieldParser,
+            m::mock('Console\OptionReader')
         );
         $this->assertInstanceOf("Generators\Generator", $instance);
     }

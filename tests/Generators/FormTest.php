@@ -13,7 +13,8 @@ class FormTest extends \BlacksmithTest
         $instance = new Form(
             new Filesystem,
             new Mustache_Engine,
-            new FieldParser
+            new FieldParser,
+            m::mock('Console\OptionReader')
         );
         $this->assertInstanceOf("Generators\Generator", $instance);
     }

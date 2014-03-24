@@ -13,7 +13,8 @@ class ViewShowTest extends \BlacksmithTest
         $instance = new ViewShow(
             new Filesystem,
             new Mustache_Engine,
-            new FieldParser
+            new FieldParser,
+            m::mock('Console\OptionReader')
         );
         $this->assertInstanceOf("Generators\Generator", $instance);
     }

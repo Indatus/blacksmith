@@ -13,7 +13,8 @@ class ViewIndexTest extends \BlacksmithTest
         $instance = new ViewIndex(
             new Filesystem,
             new Mustache_Engine,
-            new FieldParser
+            new FieldParser,
+            m::mock('Console\OptionReader')
         );
         $this->assertInstanceOf("Generators\Generator", $instance);
     }

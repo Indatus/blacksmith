@@ -1,5 +1,6 @@
 <?php namespace Generators;
 
+use Configuration\OptionReader;
 use Illuminate\Filesystem\Filesystem;
 use Mustache_Engine;
 use Parsers\FieldParser;
@@ -7,14 +8,4 @@ use Parsers\FieldParser;
 class Model extends Generator implements GeneratorInterface
 {
 
-    /**
-     * Constructor to set member vars
-     * 
-     * @param Filesystem $filesystem
-     * @param Mustache_Engine $mustache
-     */
-    public function __construct(Filesystem $filesystem, Mustache_Engine $mustache, FieldParser $fieldParser)
-    {
-        parent::__construct($filesystem, $mustache, $fieldParser);
-    }
 }

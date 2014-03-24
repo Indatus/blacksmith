@@ -1,5 +1,6 @@
 <?php namespace Generators;
 
+use Console\OptionReader;
 use DateTime;
 use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
@@ -69,10 +70,17 @@ class Generator implements GeneratorInterface
     /**
      * Var to hold the final filesystem
      * destination of the template
-     * 
+     *
      * @var string
      */
     protected $templateDestination;
+
+    /**
+     * Command line parameter option reader
+     *
+     * @var \Configuration\OptionReader
+     */
+    protected $optionReader;
 
 
     /**
@@ -81,11 +89,12 @@ class Generator implements GeneratorInterface
      * @param Filesystem $filesystem
      * @param Mustache_Engine $mustache
      */
-    public function __construct(Filesystem $filesystem, Mustache_Engine $mustache, FieldParser $fieldParser)
+    public function __construct(Filesystem $filesystem, Mustache_Engine $mustache, FieldParser $fieldParser, OptionReader $optionReader)
     {
         $this->filesystem = $filesystem;
         $this->mustache = $mustache;
         $this->fieldParser = $fieldParser;
+        $this->optionReader = $optionReader;
     }
 
 
@@ -100,13 +109,14 @@ class Generator implements GeneratorInterface
      * @param  string $fieldData      data about specific fields of the entity
      * @return bool
      */
-    public function make($entity, $sourceTemplate, $destinationDir, $fileName = null, $fieldData = null)
+    public function make($entity, $sourceTemplate, $destinationDir, $fileName = null)
     {
         //set the entity we're creating for
         //later template parsing operations
         $this->entity = $entity;
 
         //if any field data was given, parse it
+        $fieldData = $this->optionReader->getFields();
         if ($fieldData) {
             $this->fieldData = $this->fieldParser->parse($fieldData);
         }
@@ -138,7 +148,7 @@ class Generator implements GeneratorInterface
         }
 
         //actually do the write operation
-        if (! $this->filesystem->exists($this->templateDestination)) {
+        if (! $this->filesystem->exists($this->templateDestination) || $this->optionReader->isGenerationForced()) {
             return $this->filesystem->put($this->templateDestination, $this->parsedTemplate) !== false;
         }
 
