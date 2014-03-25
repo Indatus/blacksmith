@@ -1,5 +1,6 @@
 <?php namespace Delegates;
 
+use Console\OptionReader;
 use Console\GenerateCommand;
 use Configuration\ConfigReaderInterface;
 use Configuration\ConfigReader;
@@ -55,9 +56,9 @@ class AggregateGeneratorDelegate implements GeneratorDelegateInterface
     /**
      * Options passed in for generation
      * 
-     * @var array
+     * @var \Console\OptionReader
      */
-    protected $options;
+    protected $optionReader;
 
     /**
      * Filesystem object for interacting
@@ -73,7 +74,7 @@ class AggregateGeneratorDelegate implements GeneratorDelegateInterface
      * @param ConfigReaderInterface     $cfg          reader of the config file
      * @param GeneratorFactory          $genFactory   generator factory  
      * @param array                     $command_args command arguments
-     * @param array                     $options      command options
+     * @param OptionReader              $optionReader command options
      */
     public function __construct(
         GenerateCommand $cmd,
@@ -81,7 +82,7 @@ class AggregateGeneratorDelegate implements GeneratorDelegateInterface
         GeneratorFactory $genFactory,
         Filesystem $filesystem,
         array $command_args,
-        array $options = []
+        OptionReader $optionReader
     ) {
         $this->command             = $cmd;
         $this->config              = $cfg;
@@ -89,7 +90,7 @@ class AggregateGeneratorDelegate implements GeneratorDelegateInterface
         $this->filesystem          = $filesystem;
         $this->generate_for_entity = $command_args['entity'];
         $this->generation_request  = $command_args['what'];
-        $this->options             = $options;
+        $this->optionReader        = $optionReader;
     }
 
 
@@ -150,10 +151,9 @@ class AggregateGeneratorDelegate implements GeneratorDelegateInterface
             $template  = implode(DIRECTORY_SEPARATOR, [$this->config->getConfigDirectory(), $tplFile]);
             $directory = $settings[ConfigReader::CONFIG_VAL_DIRECTORY];
             $filename  = $settings[ConfigReader::CONFIG_VAL_FILENAME];
-            $options   = array_key_exists('fields', $this->options) ? $this->options['fields'] : [];
 
             //create the generator
-            $generator = $this->generator_factory->make($to_generate);
+            $generator = $this->generator_factory->make($to_generate, $this->optionReader);
 
             //run generator
             $success = $generator->make(
@@ -161,7 +161,7 @@ class AggregateGeneratorDelegate implements GeneratorDelegateInterface
                 $template,
                 $directory,
                 $filename,
-                $options
+                $this->optionReader
             );
 
             if ($success) {

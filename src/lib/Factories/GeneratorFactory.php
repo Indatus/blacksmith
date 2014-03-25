@@ -1,5 +1,6 @@
 <?php namespace Factories;
 
+use Console\OptionReader;
 use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
 use Mustache_Engine;
@@ -13,10 +14,11 @@ class GeneratorFactory
      * on the given input
      * 
      * @param  string           $what the desired generator
+     * @param  array            $options command line parameter options
      * @param  ReflectionClass  $reflectionClass used for finding out info about class to gen
      * @return Generators\GeneratorInterface
      */
-    public function make($what, $reflectionClass = null)
+    public function make($what, OptionReader $optionReader, $reflectionClass = null)
     {
         //use naming convention to convert the input name
         //into a fully quantified class name
@@ -36,7 +38,7 @@ class GeneratorFactory
             throw new \InvalidArgumentException("Unsupported interface [{$what}] must implement [{$interface}]");
         }
         
-        $instance = $refl->newInstanceArgs([new Filesystem, new Mustache_Engine, new FieldParser]);
+        $instance = $refl->newInstanceArgs([new Filesystem, new Mustache_Engine, new FieldParser, $optionReader]);
 
         return $instance;
     }

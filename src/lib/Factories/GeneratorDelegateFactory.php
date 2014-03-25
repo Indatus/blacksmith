@@ -1,6 +1,7 @@
 <?php namespace Factories;
 
 use Console\GenerateCommand;
+use Console\OptionReader;
 use Delegates\GeneratorDelegate;
 use Delegates\AggregateGeneratorDelegate;
 use Factories\GeneratorFactory;
@@ -38,19 +39,19 @@ class GeneratorDelegateFactory
      * the architecture required and calls a subsequent
      * method to handle the details.
      * 
-     * @param  GenerateCommand $cmd     cli command that was run
-     * @param  array           $args    cmmand arguments
-     * @param  array           $options command options
+     * @param  GenerateCommand          $cmd            cli command that was run
+     * @param  array                    $args           cmmand arguments
+     * @param  \Console\OptionReader    $optionReader   command options
      * @return Delegates\GeneratorDelegate
      */
-    public function make(GenerateCommand $cmd, array $args, array $options)
+    public function make(GenerateCommand $cmd, array $args, OptionReader $optionReader)
     {
-        $architecture = array_key_exists('architecture', $options) ? $options['architecture'] : static::ARCH_HEXAGONAL;
+        $architecture = $optionReader->getArchitecture();
 
         switch ($architecture) {
 
             case static::ARCH_HEXAGONAL:
-                $delegate = $this->makeHexagonalGeneratorDelegate($cmd, $args, $options);
+                $delegate = $this->makeHexagonalGeneratorDelegate($cmd, $args, $optionReader);
                 break;
 
             default:
@@ -67,12 +68,12 @@ class GeneratorDelegateFactory
      * Function to handle the generation of hexagonal 
      * architecture generator delegates
      * 
-     * @param  GenerateCommand $cmd     [description]
-     * @param  array           $args    [description]
-     * @param  array           $options [description]
-     * @return [type]                   [description]
+     * @param  GenerateCommand          $cmd             [description]
+     * @param  array                    $args            [description]
+     * @param  \Console\OptionReader    $optionReader    [description]
+     * @return [type]                           [description]
      */
-    public function makeHexagonalGeneratorDelegate(GenerateCommand $cmd, array $args, array $options)
+    public function makeHexagonalGeneratorDelegate(GenerateCommand $cmd, array $args, OptionReader $optionReader)
     {
         if (in_array($args['what'], static::$aggregate_generators)) {
 
@@ -82,7 +83,7 @@ class GeneratorDelegateFactory
                 $this->generatorFactory,
                 $this->filesystem,
                 $args,
-                $options
+                $optionReader
             );
 
         } else {
@@ -93,7 +94,7 @@ class GeneratorDelegateFactory
                 $this->generatorFactory,
                 $this->filesystem,
                 $args,
-                $options
+                $optionReader
             );
         }
         

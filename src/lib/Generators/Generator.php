@@ -78,7 +78,7 @@ class Generator implements GeneratorInterface
     /**
      * Command line parameter option reader
      *
-     * @var \Configuration\OptionReader
+     * @var \Console\OptionReader
      */
     protected $optionReader;
 

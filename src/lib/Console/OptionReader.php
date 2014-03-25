@@ -1,6 +1,8 @@
 <?php
 
-namespace Configuration;
+namespace Console;
+
+use Factories\GeneratorDelegateFactory;
 
 /**
  * Class for reading optional command line parameters
@@ -17,6 +19,15 @@ class OptionReader
     function __construct(array $options)
     {
         $this->options = $options;
+    }
+
+    /**
+     * Get the architecture to be generated
+     * @return string
+     */
+    public function getArchitecture()
+    {
+        return array_key_exists('architecture', $this->options) ? $this->options['architecture'] : GeneratorDelegateFactory::ARCH_HEXAGONAL;
     }
 
     /**
