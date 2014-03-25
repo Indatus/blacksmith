@@ -31,6 +31,7 @@ class GeneratorDelegateTest extends \BlacksmithTest
         $this->genFactory = m::mock('Factories\GeneratorFactory');
         $this->filesystem = m::mock('Illuminate\Filesystem\Filesystem');
         $this->filesystem->shouldDeferMissing();
+        $this->optionReader = m::mock('Console\OptionReader');
         $this->args = [
             'command'     => 'generate',
             'entity'      => 'Order',
@@ -40,11 +41,8 @@ class GeneratorDelegateTest extends \BlacksmithTest
 
         $this->genFactory
             ->shouldReceive('make')
-            ->with($this->args['what'])
+            ->with($this->args['what'], $this->optionReader)
             ->andReturn($this->generator);
-
-        //@todo remove this
-        $this->optionReader = m::mock('Console\OptionReader');
     }
 
 
@@ -67,7 +65,6 @@ class GeneratorDelegateTest extends \BlacksmithTest
         );
         $this->assertFalse($delegate->run());
     }
-
 
 
     public function testRunWithInvalidGenerationRequestAndFails()
@@ -146,7 +143,7 @@ class GeneratorDelegateTest extends \BlacksmithTest
                 implode(DIRECTORY_SEPARATOR, [$baseDir, $settings[ConfigReader::CONFIG_VAL_TEMPLATE]]),
                 $settings[ConfigReader::CONFIG_VAL_DIRECTORY],
                 $settings[ConfigReader::CONFIG_VAL_FILENAME],
-                null
+                $this->optionReader
             )->andReturn(true);
 
         $dest = '/path/to/dir/Output.php';
@@ -205,7 +202,7 @@ class GeneratorDelegateTest extends \BlacksmithTest
                 implode(DIRECTORY_SEPARATOR, [$baseDir, $settings[ConfigReader::CONFIG_VAL_TEMPLATE]]),
                 $settings[ConfigReader::CONFIG_VAL_DIRECTORY],
                 $settings[ConfigReader::CONFIG_VAL_FILENAME],
-                null
+                $this->optionReader
             )->andReturn(false);
 
         $this->command->shouldReceive('comment')->once()
