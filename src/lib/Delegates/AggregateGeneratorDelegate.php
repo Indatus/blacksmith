@@ -206,9 +206,15 @@ class AggregateGeneratorDelegate implements GeneratorDelegateInterface
         $routes = implode(DIRECTORY_SEPARATOR, [$dir, 'app', 'routes.php']);
 
         if ($this->filesystem->exists($routes)) {
+            $route = "Route::resource('" . $name . "', '" . ucwords($name) . "Controller');";
+            $contents = $this->filesystem->get($routes);
+            if (str_contains($contents, $route)) {
+                return;
+            }
+
             $this->filesystem->append(
                 $routes,
-                "\n\nRoute::resource('" . $name . "', '" . ucwords($name) . "Controller');"
+                "\n\n".$route
             );
         }
     }
