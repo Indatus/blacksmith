@@ -7,6 +7,20 @@ use Mockery as m;
 
 class ConfigReaderTest extends \BlacksmithTest
 {
+    /**
+     * @expectedException \Illuminate\Filesystem\FileNotFoundException
+     */
+    public function testErrorMissingConfig()
+    {
+        $path = '/path/to/config.json';
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+        $fs->shouldReceive('exists')->once()->with($path)->andReturn(false);
+
+        $reader = new ConfigReader($fs, $path);
+    }
+
+
+
     public function testReadGivenConfig()
     {
         $path = '/path/to/config.json';

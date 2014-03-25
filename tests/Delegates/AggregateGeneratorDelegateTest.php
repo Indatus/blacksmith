@@ -201,6 +201,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
         $this->config->shouldReceive('getAvailableAggregates')->once()
             ->andReturn(array_keys($options));
 
+        $options['scaffold']['view_show'] = false;
         $this->config->shouldReceive('getAggregateValues')->once()
             ->with('scaffold')
             ->andReturn($options['scaffold']);
@@ -217,16 +218,12 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
         ];
 
         foreach ($options['scaffold'] as $to_generate) {
-            $this->genFactory->shouldReceive('make')->once()
-                ->with($to_generate, $this->optionReader)
-                ->andReturn($this->generator);
-
             //test skipping generation
             if ($to_generate === 'view_show') {
                 $this->config->shouldReceive('getConfigValue')->once()
                     ->with($to_generate)
                     ->andReturn(false);
-                $this->command->shouldReceive('comment')->once()
+                $this->command->shouldReceive('comment')
                     ->with(
                         "Blacksmith",
                         "I skipped \"".$to_generate."\"",
@@ -234,6 +231,10 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
                     );
                 continue;
             }
+
+            $this->genFactory->shouldReceive('make')->once()
+                ->with($to_generate, $this->optionReader)
+                ->andReturn($this->generator);
 
             $this->config->shouldReceive('getConfigValue')
                 ->with($to_generate)
