@@ -184,6 +184,7 @@ Variable | Description | Output Example
 `collection` | Plural underscore cased entity name | orders
 `instance` | Singular underscore cased entity name | order
 `fields` | Associative multi-dimensional array of field names and attributes | `['name' => ['type' => 'string']]`
+`year` | The current year | 2014
 
 <a name="specific-template-variables" />
 ### Generator Specific Variables
