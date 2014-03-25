@@ -19,7 +19,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
 
     private $args;
 
-    private $options;
+    private $optionReader;
 
     public function setUp()
     {
@@ -42,7 +42,10 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
             ->with($this->args['what'])
             ->andReturn($this->generator);
 
-        $this->options = [];
+        $this->optionReader = m::mock('Console\OptionReader');
+        $this->optionReader->shouldReceive('isGenerationForced')->andReturn(false);
+        $this->optionReader->shouldReceive('getFields')->andReturn([]);
+        $this->optionReader->shouldDeferMissing();
     }
 
 
@@ -61,7 +64,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
             $this->genFactory,
             $this->filesystem,
             $this->args,
-            $this->options
+            $this->optionReader
         );
         $this->assertFalse($delegate->run());
     }
@@ -107,14 +110,14 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
 
         $this->command->shouldReceive('comment')->once()
             ->with('Error Details', "Please choose from: ". implode(", ", array_keys($options)), true);
-        
+
         $delegate = new AggregateGeneratorDelegate(
             $this->command,
             $this->config,
             $this->genFactory,
             $this->filesystem,
             $this->args,
-            $this->options
+            $this->optionReader
         );
         $this->assertFalse($delegate->run());
     }
@@ -156,7 +159,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
                 ->andReturn($settings);
 
             $this->genFactory->shouldReceive('make')->once()
-                ->with($to_generate)
+                ->with($to_generate, $this->optionReader)
                 ->andReturn($this->generator);
 
             //mock call to generator->make()
@@ -177,8 +180,9 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
             $this->genFactory,
             $this->filesystem,
             $this->args,
-            $this->options
+            $this->optionReader
         );
+
         $this->assertTrue($delegate->run());
     }
 
@@ -230,7 +234,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
                 ->andReturn($configValue);
 
             $this->genFactory->shouldReceive('make')->once()
-                ->with($to_generate)
+                ->with($to_generate, $this->optionReader)
                 ->andReturn($this->generator);
 
             //mock call to generator->make()
@@ -251,12 +255,10 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
             $this->genFactory,
             $this->filesystem,
             $this->args,
-            $this->options
+            $this->optionReader
         );
         $this->assertTrue($delegate->run());
     }
-
-
 
     public function testRunWithValidArgumentsShouldFail()
     {
@@ -294,7 +296,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
                 ->andReturn($settings);
 
             $this->genFactory->shouldReceive('make')->once()
-                ->with($to_generate)
+                ->with($to_generate, $this->optionReader)
                 ->andReturn($this->generator);
 
             //mock call to generator->make()
@@ -317,7 +319,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
             $this->genFactory,
             $this->filesystem,
             $this->args,
-            $this->options
+            $this->optionReader
         );
         $this->assertTrue($delegate->run());
     }
@@ -343,7 +345,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
             $this->genFactory,
             $this->filesystem,
             $this->args,
-            $this->options
+            $this->optionReader
         );
         $delegate->updateRoutesFile($name, $dir);
     }

@@ -1,5 +1,6 @@
 <?php namespace Delegates;
 
+use Console\OptionReader;
 use Delegates\GeneratorDelegate;
 use Console\GenerateCommand;
 use Configuration\ConfigReader;
@@ -19,7 +20,7 @@ class GeneratorDelegateTest extends \BlacksmithTest
 
     private $args;
 
-    private $options;
+    private $optionReader;
 
     public function setUp()
     {
@@ -42,7 +43,8 @@ class GeneratorDelegateTest extends \BlacksmithTest
             ->with($this->args['what'])
             ->andReturn($this->generator);
 
-        $this->options = [];
+        //@todo remove this
+        $this->optionReader = m::mock('Console\OptionReader');
     }
 
 
@@ -61,7 +63,7 @@ class GeneratorDelegateTest extends \BlacksmithTest
             $this->genFactory,
             $this->filesystem,
             $this->args,
-            $this->options
+            $this->optionReader
         );
         $this->assertFalse($delegate->run());
     }
@@ -102,7 +104,7 @@ class GeneratorDelegateTest extends \BlacksmithTest
             $this->genFactory,
             $this->filesystem,
             $this->args,
-            $this->options
+            $this->optionReader
         );
         $this->assertFalse($delegate->run());
     }
@@ -160,7 +162,7 @@ class GeneratorDelegateTest extends \BlacksmithTest
             $this->genFactory,
             $this->filesystem,
             $this->args,
-            $this->options
+            $this->optionReader
         );
         $this->assertTrue($delegate->run());
     }
@@ -215,7 +217,7 @@ class GeneratorDelegateTest extends \BlacksmithTest
             $this->genFactory,
             $this->filesystem,
             $this->args,
-            $this->options
+            $this->optionReader
         );
         $this->assertFalse($delegate->run());
     }

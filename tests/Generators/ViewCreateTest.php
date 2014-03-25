@@ -1,5 +1,6 @@
 <?php namespace Generators;
 
+use Console\OptionReader;
 use Illuminate\Filesystem\Filesystem;
 use Parsers\FieldParser;
 use Mustache_Engine;
@@ -14,7 +15,7 @@ class ViewCreateTest extends \BlacksmithTest
             new Filesystem,
             new Mustache_Engine,
             new FieldParser,
-            m::mock('Console\OptionReader')
+            new OptionReader([])
         );
         $this->assertInstanceOf("Generators\Generator", $instance);
     }

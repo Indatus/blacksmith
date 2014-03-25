@@ -1,6 +1,6 @@
 <?php namespace Generators;
 
-
+use Console\OptionReader;
 use DateTime;
 use Generators\Generator;
 use Illuminate\Filesystem\Filesystem;
@@ -263,7 +263,7 @@ class GeneratorTest extends \BlacksmithTest
                 $fs,
                 new Mustache_Engine,
                 $fp,
-                m::mock('Console\OptionReader')
+                new OptionReader([])
             ));
         $generator->shouldDeferMissing();
 
