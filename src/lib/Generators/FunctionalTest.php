@@ -43,7 +43,8 @@ class FunctionalTest extends Generator implements GeneratorInterface
             'collection'      => Str::plural(Str::snake($entity)),
             'instance'        => Str::singular(Str::snake($entity)),
             'fields'          => $fieldData,
-            'mock_attributes' => $mock_attribute_rows
+            'mock_attributes' => $mock_attribute_rows,
+            'year'       => (new DateTime())->format('Y')
         ];
     }
 

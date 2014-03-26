@@ -6,6 +6,8 @@ class {{Entities}}Test extends TestCase
 {
     public function __construct()
     {
+        parent::__constuct();
+
         $this->entity = m::mock('{{Entity}}');
 
         $this->repository = m::mock(

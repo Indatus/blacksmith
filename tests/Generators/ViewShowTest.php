@@ -49,7 +49,8 @@ class ViewShowTest extends \BlacksmithTest
             'instance'   => 'order',
             'fields'     => $fieldData,
             'headings'   => $headings,
-            'cells'      => $cells
+            'cells'      => $cells,
+            'year'       => (new DateTime())->format('Y')
         ];
 
         $this->assertEquals($expected, $generator->getTemplateVars());

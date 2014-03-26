@@ -64,7 +64,8 @@ class FormTest extends \BlacksmithTest
             'collection' => 'orders',
             'instance'   => 'order',
             'fields'     => $fieldData,
-            'form_rows'  => $form_rows
+            'form_rows'  => $form_rows,
+            'year'       => (new DateTime())->format('Y')
         ];
 
         $this->assertEquals($expected, $generator->getTemplateVars());

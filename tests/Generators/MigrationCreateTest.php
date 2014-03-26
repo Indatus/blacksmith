@@ -53,7 +53,8 @@ class MigrationCreateTest extends \BlacksmithTest
             'instance'   => 'order',
             'fields'     => $fieldData,
             'columns'    => $columnData,
-            'migration_timestamp' => date('Y_m_d_His')
+            'migration_timestamp' => date('Y_m_d_His'),
+            'year'       => (new DateTime())->format('Y')
         ];
 
         $this->assertEquals($expected, $generator->getTemplateVars());
