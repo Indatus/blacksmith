@@ -1,7 +1,7 @@
 <?php namespace Parsers;
 
 /**
- * This class was coppied from the MIT licensed
+ * This class was copied from the MIT licensed
  * way\generators package (c) Jeffrey Way.
  *
  * @see  https://github.com/JeffreyWay/Laravel-4-Generators/blob/master/src/Way/Generators/Parsers/MigrationFieldsParser.php

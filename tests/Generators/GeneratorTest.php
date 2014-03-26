@@ -1,6 +1,6 @@
 <?php namespace Generators;
 
-
+use Console\OptionReader;
 use DateTime;
 use Generators\Generator;
 use Illuminate\Filesystem\Filesystem;
@@ -30,7 +30,11 @@ class GeneratorTest extends \BlacksmithTest
         $fp = m::mock('Parsers\FieldParser');
         $fp->shouldDeferMissing();
 
-        $generator = m::mock('Generators\Generator', array($fs, $me, $fp));
+        $or = m::mock('Console\OptionReader');
+        $or->shouldReceive('getFields')->andReturn('name:string');
+        $or->shouldReceive('isGenerationForced')->andReturn(false);
+
+        $generator = m::mock('Generators\Generator', array($fs, $me, $fp, $or));
         $generator->shouldDeferMissing();
 
         $generator->shouldReceive('getFileName')
@@ -135,7 +139,15 @@ class GeneratorTest extends \BlacksmithTest
         $fp = m::mock('Parsers\FieldParser');
         $fp->shouldDeferMissing();
 
-        $generator = m::mock('Generators\Generator', array($fs, $me, $fp));
+        $or = m::mock('Console\OptionReader');
+        $or->shouldReceive('getFields')->andReturn([]);
+
+        $generator = m::mock('Generators\Generator', array(
+                $fs,
+                $me,
+                $fp,
+                $or
+            ));
         $generator->shouldDeferMissing();
 
         $generator->shouldReceive('getTemplate')
@@ -247,7 +259,12 @@ class GeneratorTest extends \BlacksmithTest
 
         $fs->shouldReceive('get')->once()->with($template)->andReturn($templateText);
 
-        $generator = m::mock('Generators\Generator', array($fs, new Mustache_Engine, $fp));
+        $generator = m::mock('Generators\Generator', array(
+                $fs,
+                new Mustache_Engine,
+                $fp,
+                new OptionReader([])
+            ));
         $generator->shouldDeferMissing();
 
         $generator->shouldReceive('getEntityName')->once()

@@ -1,5 +1,6 @@
 <?php namespace Delegates;
 
+use Console\OptionReader;
 use Console\GenerateCommand;
 use Configuration\ConfigReaderInterface;
 use Configuration\ConfigReader;
@@ -53,9 +54,9 @@ class GeneratorDelegate implements GeneratorDelegateInterface
     /**
      * Options passed in for generation
      * 
-     * @var array
+     * @var \Console\OptionReader
      */
-    protected $options;
+    protected $optionReader;
 
     /**
      * Filesystem object for interacting
@@ -66,13 +67,7 @@ class GeneratorDelegate implements GeneratorDelegateInterface
 
 
     /**
-     * Constructor to setup up our class variables
-     * 
-     * @param GenerateCommand           $cmd          executed command
-     * @param ConfigReaderInterface     $cfg          reader of the config file
-     * @param GeneratorFactory          $genFactory   generator factory  
-     * @param array                     $command_args command arguments
-     * @param array                     $options      command options
+     * @inheritDoc
      */
     public function __construct(
         GenerateCommand $cmd,
@@ -80,15 +75,15 @@ class GeneratorDelegate implements GeneratorDelegateInterface
         GeneratorFactory $genFactory,
         Filesystem $filesystem,
         array $command_args,
-        array $options = []
+        OptionReader $optionReader
     ) {
         $this->command             = $cmd;
         $this->config              = $cfg;
-        $this->generator           = @$genFactory->make($command_args['what']);
+        $this->generator           = @$genFactory->make($command_args['what'], $optionReader);
         $this->filesystem          = $filesystem;
         $this->generate_for_entity = $command_args['entity'];
         $this->generation_request  = $command_args['what'];
-        $this->options             = $options;
+        $this->optionReader        = $optionReader;
     }
 
 
@@ -139,7 +134,6 @@ class GeneratorDelegate implements GeneratorDelegateInterface
         $template  = implode(DIRECTORY_SEPARATOR, [$this->config->getConfigDirectory(), $tplFile]);
         $directory = $settings[ConfigReader::CONFIG_VAL_DIRECTORY];
         $filename  = $settings[ConfigReader::CONFIG_VAL_FILENAME];
-        $options   = array_key_exists('fields', $this->options) ? $this->options['fields'] : [];
 
         //run generator
         $success = $this->generator->make(
@@ -147,7 +141,7 @@ class GeneratorDelegate implements GeneratorDelegateInterface
             $template,
             $directory,
             $filename,
-            $options
+            $this->optionReader
         );
 
         if ($success) {

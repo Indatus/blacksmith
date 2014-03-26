@@ -7,18 +7,6 @@ use Parsers\FieldParser;
 class Seed extends Generator implements GeneratorInterface
 {
 
-    /**
-     * Constructor to set member vars
-     * 
-     * @param Filesystem $filesystem
-     * @param Mustache_Engine $mustache
-     */
-    public function __construct(Filesystem $filesystem, Mustache_Engine $mustache, FieldParser $fieldParser)
-    {
-        parent::__construct($filesystem, $mustache, $fieldParser);
-    }
-
-
     public function make($entity, $sourceTemplate, $destinationDir, $fileName = null, $fieldData = null)
     {
         $result = parent::make($entity, $sourceTemplate, $destinationDir, $fileName, $fieldData);

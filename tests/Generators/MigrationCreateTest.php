@@ -1,5 +1,6 @@
 <?php namespace Generators;
 
+use Console\OptionReader;
 use Illuminate\Filesystem\Filesystem;
 use Parsers\FieldParser;
 use Mustache_Engine;
@@ -14,7 +15,8 @@ class MigrationCreateTest extends \BlacksmithTest
         $instance = new MigrationCreate(
             new Filesystem,
             new Mustache_Engine,
-            new FieldParser
+            new FieldParser,
+            new OptionReader([])
         );
         $this->assertInstanceOf("Generators\Generator", $instance);
     }

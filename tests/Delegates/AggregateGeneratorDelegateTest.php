@@ -19,7 +19,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
 
     private $args;
 
-    private $options;
+    private $optionReader;
 
     public function setUp()
     {
@@ -37,12 +37,15 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
             'config-file' => null,
         ];
 
+        $this->optionReader = m::mock('Console\OptionReader');
+        $this->optionReader->shouldReceive('isGenerationForced')->andReturn(false);
+        $this->optionReader->shouldReceive('getFields')->andReturn([]);
+        $this->optionReader->shouldDeferMissing();
+
         $this->genFactory
             ->shouldReceive('make')
-            ->with($this->args['what'])
+            ->with($this->args['what'], $this->optionReader)
             ->andReturn($this->generator);
-
-        $this->options = [];
     }
 
 
@@ -61,7 +64,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
             $this->genFactory,
             $this->filesystem,
             $this->args,
-            $this->options
+            $this->optionReader
         );
         $this->assertFalse($delegate->run());
     }
@@ -107,14 +110,14 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
 
         $this->command->shouldReceive('comment')->once()
             ->with('Error Details', "Please choose from: ". implode(", ", array_keys($options)), true);
-        
+
         $delegate = new AggregateGeneratorDelegate(
             $this->command,
             $this->config,
             $this->genFactory,
             $this->filesystem,
             $this->args,
-            $this->options
+            $this->optionReader
         );
         $this->assertFalse($delegate->run());
     }
@@ -156,7 +159,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
                 ->andReturn($settings);
 
             $this->genFactory->shouldReceive('make')->once()
-                ->with($to_generate)
+                ->with($to_generate, $this->optionReader)
                 ->andReturn($this->generator);
 
             //mock call to generator->make()
@@ -177,8 +180,9 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
             $this->genFactory,
             $this->filesystem,
             $this->args,
-            $this->options
+            $this->optionReader
         );
+
         $this->assertTrue($delegate->run());
     }
 
@@ -197,6 +201,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
         $this->config->shouldReceive('getAvailableAggregates')->once()
             ->andReturn(array_keys($options));
 
+        $options['scaffold']['view_show'] = false;
         $this->config->shouldReceive('getAggregateValues')->once()
             ->with('scaffold')
             ->andReturn($options['scaffold']);
@@ -212,26 +217,28 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
             ConfigReader::CONFIG_VAL_FILENAME  => 'Output.php'
         ];
 
-        $options['scaffold']['view_show'] = false;
-        foreach ($options['scaffold'] as $idx => $to_generate) {
-            $configValue = $settings;
-            if ($to_generate === false) {
+        foreach ($options['scaffold'] as $to_generate) {
+            //test skipping generation
+            if ($to_generate === 'view_show') {
+                $this->config->shouldReceive('getConfigValue')->once()
+                    ->with($to_generate)
+                    ->andReturn(false);
                 $this->command->shouldReceive('comment')
                     ->with(
                         "Blacksmith",
-                        "I skipped \"".$to_generate.'"',
+                        "I skipped \"".$to_generate."\"",
                         true
                     );
                 continue;
             }
 
-            $this->config->shouldReceive('getConfigValue')
-                ->withAnyArgs()
-                ->andReturn($configValue);
-
             $this->genFactory->shouldReceive('make')->once()
-                ->with($to_generate)
+                ->with($to_generate, $this->optionReader)
                 ->andReturn($this->generator);
+
+            $this->config->shouldReceive('getConfigValue')
+                ->with($to_generate)
+                ->andReturn($settings);
 
             //mock call to generator->make()
             $this->generator->shouldReceive('make')
@@ -251,12 +258,10 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
             $this->genFactory,
             $this->filesystem,
             $this->args,
-            $this->options
+            $this->optionReader
         );
         $this->assertTrue($delegate->run());
     }
-
-
 
     public function testRunWithValidArgumentsShouldFail()
     {
@@ -294,7 +299,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
                 ->andReturn($settings);
 
             $this->genFactory->shouldReceive('make')->once()
-                ->with($to_generate)
+                ->with($to_generate, $this->optionReader)
                 ->andReturn($this->generator);
 
             //mock call to generator->make()
@@ -317,7 +322,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
             $this->genFactory,
             $this->filesystem,
             $this->args,
-            $this->options
+            $this->optionReader
         );
         $this->assertTrue($delegate->run());
     }
@@ -329,6 +334,10 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
         $dir = '/some/path';
         $routes = implode(DIRECTORY_SEPARATOR, [$dir, 'app', 'routes.php']);
         $data = "\n\nRoute::resource('" . $name . "', '" . ucwords($name) . "Controller');";
+
+        $this->filesystem->shouldReceive('get')->once()
+            ->with($routes)
+            ->andReturn('');
 
         $this->filesystem->shouldReceive('exists')->once()
             ->with($routes)
@@ -343,7 +352,38 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
             $this->genFactory,
             $this->filesystem,
             $this->args,
-            $this->options
+            $this->optionReader
+        );
+        $delegate->updateRoutesFile($name, $dir);
+    }
+
+
+    public function testNotUpdateRoutesFileWithDuplicates()
+    {
+        $name = 'orders';
+        $dir = '/some/path';
+        $routes = implode(DIRECTORY_SEPARATOR, [$dir, 'app', 'routes.php']);
+        $route = "Route::resource('" . $name . "', '" . ucwords($name) . "Controller');";
+        $data = "\n\n".$route;
+
+        $this->filesystem->shouldReceive('get')->once()
+            ->with($routes)
+            ->andReturn($route);
+
+        $this->filesystem->shouldReceive('exists')->once()
+            ->with($routes)
+            ->andReturn(true);
+
+        $this->filesystem->shouldReceive('append')->never()
+            ->with($routes, $data);
+
+        $delegate = new AggregateGeneratorDelegate(
+            $this->command,
+            $this->config,
+            $this->genFactory,
+            $this->filesystem,
+            $this->args,
+            $this->optionReader
         );
         $delegate->updateRoutesFile($name, $dir);
     }

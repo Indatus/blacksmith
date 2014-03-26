@@ -1,5 +1,6 @@
 <?php namespace Generators;
 
+use Console\OptionReader;
 use Illuminate\Filesystem\Filesystem;
 use Parsers\FieldParser;
 use Mustache_Engine;
@@ -13,7 +14,8 @@ class FormTest extends \BlacksmithTest
         $instance = new Form(
             new Filesystem,
             new Mustache_Engine,
-            new FieldParser
+            new FieldParser,
+            new OptionReader([])
         );
         $this->assertInstanceOf("Generators\Generator", $instance);
     }

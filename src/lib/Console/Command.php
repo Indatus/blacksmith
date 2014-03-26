@@ -64,12 +64,12 @@ trait Command {
         $options = [];
 
         // Here we will gather all of the command line options that have been specified with
-        // the double hyphens in front of their name.
+        // the double hyphens in front of their name, with or without a value.
         foreach ($_SERVER['argv'] as $argument) {
-            preg_match('/^\-\-(.*?)=(.*)$/', $argument, $match);
+            preg_match('/^\-\-(.*?)(=(.*))*$/', $argument, $match);
 
             if (count($match) > 0) {
-                $options[$match[1]] = $match[2];
+                $options[$match[1]] = isset($match[3]) ? $match[3] : '';
             }
         }
 

@@ -1,8 +1,10 @@
 <?php namespace Generators;
 
+use Console\OptionReader;
 use Illuminate\Filesystem\Filesystem;
 use Parsers\FieldParser;
 use Mustache_Engine;
+use Mockery as m;
 
 class ServiceDestroyerTest extends \BlacksmithTest
 {
@@ -12,7 +14,8 @@ class ServiceDestroyerTest extends \BlacksmithTest
         $instance = new ServiceDestroyer(
             new Filesystem,
             new Mustache_Engine,
-            new FieldParser
+            new FieldParser,
+            new OptionReader([])
         );
         $this->assertInstanceOf("Generators\Generator", $instance);
     }

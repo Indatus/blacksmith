@@ -1,7 +1,9 @@
 <?php namespace Configuration;
 
+use Illuminate\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
+use Mockery\CountValidator\Exception;
 
 /**
  * Class for reading files and values from Blacksmith
@@ -139,8 +141,10 @@ class ConfigReader implements ConfigReaderInterface
     {
         $this->filesystem = $fs;
 
-        if (!is_null($path) && $this->filesystem->exists($path)) {
-
+        if (!is_null($path)) {
+            if (!$this->filesystem->exists($path)) {
+                throw new FileNotFoundException('Config file "'.$path.'" could not be found');
+            }
             $this->config = json_decode($this->filesystem->get($path), true);
             $this->configDir = pathinfo($path, PATHINFO_DIRNAME);
 
