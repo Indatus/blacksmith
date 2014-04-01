@@ -26,6 +26,7 @@ If you don't like the templates + configuration shipped with Blacksmith, don't w
   * [Compile from source](#install-compile)
   * [Updating Blacksmith](#updating)
 * [Usage](#usage)
+* [Getting Started](#getting-started)
 * [The Config File](#config-file)
 * [Templates](#templates)
 * [Template Variables](#template-variables)
@@ -108,10 +109,17 @@ An example without placeholders might look like this:
 
 > **Note:** Blacksmith works from your current working directory, so if you have a template that gets written to a releative path, that will be relative to your current directory when you run Blacksmith. For **Laravel** this directory should be the application root.
 
+<a name="getting-started" />
+## Getting Started
+
+While Blacksmith comes packaged with templates and base configuration file, it's likely you'll want to [download the templates](src/lib/Generators/templates) and customize them to suit your needs.  This will also require you create your own config file which you can read more about in the next section.
+
+> As you begin to generate you may notice some interfaces referenced in templates that were not generated.  This is not a mistake.  You should create these interfaces to suit your application.
+
 <a name="config-file" />
 ## The Config File
 
-The Blacksmith config file is writen in JSON and has a specific format.  Blacksmith will validate the file's format before use and provide errors if there is a mis-configuration.
+The Blacksmith config file is written in JSON and has a specific format.  Blacksmith will validate the file's format before use and provide errors if there is a mis-configuration.
 
 The config file has a root level item for each single generator, and a root level item for *config_type*. The *config_type* element leaves the door open for subsequent configurations like "mvc" that would require a different collection of generator keys to be present.
 
