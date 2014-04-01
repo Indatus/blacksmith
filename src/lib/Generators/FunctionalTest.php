@@ -1,8 +1,7 @@
 <?php namespace Generators;
 
-use Illuminate\Filesystem\Filesystem;
-use Mustache_Engine;
-use Parsers\FieldParser;
+
+use DateTime;
 use Illuminate\Support\Str;
 
 class FunctionalTest extends Generator implements GeneratorInterface

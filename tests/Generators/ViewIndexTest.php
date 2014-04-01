@@ -1,5 +1,6 @@
 <?php namespace Generators;
 
+use DateTime;
 use Console\OptionReader;
 use Illuminate\Filesystem\Filesystem;
 use Parsers\FieldParser;
@@ -49,8 +50,7 @@ class ViewIndexTest extends \BlacksmithTest
             'instance'   => 'order',
             'fields'     => $fieldData,
             'headings'   => $headings,
-            'cells'      => $cells,
-            'year'       => (new DateTime())->format('Y')
+            'cells'      => $cells
         ];
 
         $this->assertEquals($expected, $generator->getTemplateVars());

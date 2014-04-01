@@ -1,8 +1,6 @@
 <?php namespace Generators;
 
-use Illuminate\Filesystem\Filesystem;
-use Mustache_Engine;
-use Parsers\FieldParser;
+use DateTime;
 use Factories\MigrationColumnFactory;
 use Illuminate\Support\Str;
 
@@ -27,7 +25,8 @@ class MigrationCreate extends Generator implements GeneratorInterface
             'instance'            => Str::singular(Str::snake($entity)),
             'fields'              => $fieldData,
             'columns'             => implode("\n\t\t\t", MigrationColumnFactory::make($fieldData)),
-            'migration_timestamp' => date('Y_m_d_His')
+            'migration_timestamp' => date('Y_m_d_His'),
+            'year'                => (new DateTime())->format('Y')
         ];
     }
 }

@@ -1,5 +1,6 @@
 <?php namespace Generators;
 
+use DateTime;
 use Console\OptionReader;
 use Illuminate\Filesystem\Filesystem;
 use Parsers\FieldParser;
@@ -64,8 +65,7 @@ class FormTest extends \BlacksmithTest
             'collection' => 'orders',
             'instance'   => 'order',
             'fields'     => $fieldData,
-            'form_rows'  => $form_rows,
-            'year'       => (new DateTime())->format('Y')
+            'form_rows'  => $form_rows
         ];
 
         $this->assertEquals($expected, $generator->getTemplateVars());

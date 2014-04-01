@@ -1,10 +1,10 @@
 <?php namespace Generators;
 
+use DateTime;
 use Console\OptionReader;
 use Illuminate\Filesystem\Filesystem;
 use Parsers\FieldParser;
 use Mustache_Engine;
-use Generators\MigrationCreate;
 use Mockery as m;
 
 class MigrationCreateTest extends \BlacksmithTest

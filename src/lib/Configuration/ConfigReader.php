@@ -2,8 +2,6 @@
 
 use Illuminate\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
-use Mockery\CountValidator\Exception;
 
 /**
  * Class for reading files and values from Blacksmith
