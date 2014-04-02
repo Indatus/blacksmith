@@ -23,7 +23,7 @@ class {{Entity}}Destroyer
     {
         $instance = ${{instance}}->find($identity);
 
-        if ($instance->delete()) {
+        if (${{instance}}->delete($instance)) {
 
             return $listener->destroySucceeded($instance);
 
