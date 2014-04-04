@@ -61,15 +61,30 @@
         "directory": "app/lib/Services/{{Entities}}",
         "filename": "{{Entity}}Creator.php"
     },
+    "service_creator_test": {
+        "template": "service_creator_test.txt",
+        "directory": "app/lib/Tests/Services/{{Entities}}",
+        "filename": "{{Entity}}CreatorTest.php"
+    },
     "service_updater": {
         "template": "service_updater.txt",
         "directory": "app/lib/Services/{{Entities}}",
         "filename": "{{Entity}}Updater.php"
     },
+    "service_updater_test": {
+        "template": "service_updater_test.txt",
+        "directory": "app/lib/Tests/Services/{{Entities}}",
+        "filename": "{{Entity}}UpdaterTest.php"
+    },
     "service_destroyer": {
         "template": "service_destroyer.txt",
         "directory": "app/lib/Services/{{Entities}}",
         "filename": "{{Entity}}Destroyer.php"
+    },
+    "service_destroyer_test": {
+        "template": "service_destroyer_test.txt",
+        "directory": "app/lib/Tests/Services/{{Entities}}",
+        "filename": "{{Entity}}DestroyerTest.php"
     },
     "validator": {
         "template": "validator.txt",

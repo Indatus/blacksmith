@@ -1,0 +1,35 @@
+<?php namespace Services\{{Entities}};
+
+use Contracts\Repositories\{{Entity}}RepositoryInterface;
+use Contracts\Notification\DestroyerInterface;
+use Validators\{{Entity}}Validator;
+
+class {{Entity}}Destroyer
+{
+
+    /**
+     * Attempt to destroy the {{instance}} and
+     * notify the $listener of the success or failure.  The
+     * $attributes are passed in as a convenience in case they
+     * are needed
+     * 
+     * @param  {{Entity}}RepositoryInterface ${{instance}}
+     * @param  DestroyerInterface       $listener 
+     * @param  mixed                    $identity
+     * @param  array                    $attributes
+     * @return mixed - returned value from the $listener 
+     */
+    public function destroy({{Entity}}RepositoryInterface ${{instance}}, DestroyerInterface $listener, $identity, array $attributes = [])
+    {
+        $instance = ${{instance}}->find($identity);
+
+        if (${{instance}}->delete($instance)) {
+
+            return $listener->destroySucceeded($instance);
+
+        } else {
+
+            return $listener->destroyFailed($instance);
+        }
+    }
+}

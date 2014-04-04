@@ -78,25 +78,7 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
         $this->args['what'] = $requested;
 
         //mock valid options
-        $options = [
-            'scaffold' => [
-                "model",
-                "controller",
-                "seed",
-                "migration_create",
-                "view_create",
-                "view_update",
-                "view_show",
-                "view_index",
-                "form",
-                "unit_test",
-                "functional_test",
-                "service_creator",
-                "service_updater",
-                "service_destroyer",
-                "validator"
-            ]
-        ];
+        $options = $this->getValidOptions();
 
         $this->config->shouldReceive('validateConfig')->once()
             ->andReturn(true);
@@ -402,10 +384,12 @@ class AggregateGeneratorDelegateTest extends \BlacksmithTest
                     "view_index",
                     "form",
                     "unit_test",
-                    "functional_test",
                     "service_creator",
+                    "service_creator_test",
                     "service_updater",
+                    "service_updater_test",
                     "service_destroyer",
+                    "service_destroyer_test",
                     "validator"
                 ]
             ];

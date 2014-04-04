@@ -1,0 +1,50 @@
+<?php namespace Services\{{Entities}};
+
+use Contracts\Repositories\{{Entity}}RepositoryInterface;
+use Contracts\Notification\UpdaterInterface;
+use Validators\{{Entity}}Validator;
+
+class {{Entity}}Updater
+{
+
+    /**
+     * @param {{Entity}}Validator $validator
+     */
+    protected $validator;
+
+    /**
+     * Inject the validator used for updating
+     * 
+     * @param {{Entity}}Validator $validator
+     */
+    public function __construct({{Entity}}Validator $validator)
+    {
+        $this->validator = $validator;
+    }
+
+    /**
+     * Attempt to update the {{instance}} with the given attributes and
+     * notify the $listener of the success or failure
+     * 
+     * @param  {{Entity}}RepositoryInterface ${{instance}}
+     * @param  UpdaterInterface         $listener 
+     * @param  mixed                    $identity
+     * @param  array                    $attributes
+     * @return mixed - returned value from the $listener 
+     */
+    public function update({{Entity}}RepositoryInterface ${{instance}}, UpdaterInterface $listener, $identity, array $attributes = [])
+    {
+        $instance = ${{instance}}->find($identity);
+
+        if ($this->validator->validate($attributes)) {
+
+            $instance->update($attributes);
+
+            return $listener->updateSucceeded($instance);
+
+        } else {
+
+            return $listener->updateFailed($instance, $this->validator);
+        }
+    }
+}

@@ -119,8 +119,11 @@ class ConfigReader implements ConfigReaderInterface
             "unit_test",
             "functional_test",
             "service_creator",
+            "service_creator_test",
             "service_updater",
+            "service_updater_test",
             "service_destroyer",
+            "service_destroyer_test",
             "validator",
             "repository_interface",
             "db_repository"
