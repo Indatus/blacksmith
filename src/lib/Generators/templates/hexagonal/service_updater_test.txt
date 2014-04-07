@@ -1,50 +1,63 @@
-<?php namespace Services\{{Entities}};
+<?php namespace Tests\Services\{{Entities}};
 
-use Contracts\Repositories\{{Entity}}RepositoryInterface;
-use Contracts\Notification\UpdaterInterface;
-use Validators\{{Entity}}Validator;
+/**
+ * This class contains unit tests for the {{Entity}} updater.
+ */
 
-class {{Entity}}Updater
+use Mockery as m;
+use Services\{{Entities}}\{{Entity}}Creator;
+use TestCase;
+
+class {{Entity}}CreatorTest extends TestCase
 {
+    /** @var array */
+    protected $attrs;
 
-    /**
-     * @param {{Entity}}Validator $validator
-     */
+    /** @var \Mockery\MockInterface */
     protected $validator;
 
-    /**
-     * Inject the validator used for updating
-     * 
-     * @param {{Entity}}Validator $validator
-     */
-    public function __construct({{Entity}}Validator $validator)
+    /** @var \Mockery\MockInterface */
+    protected $repository;
+
+    /** @var \Mockery\MockInterface */
+    protected $listener;
+
+    /** @var string */
+    protected $modelClass = '\{{Entity}}';
+
+    public function setUp()
     {
-        $this->validator = $validator;
+        parent::setUp();
+
+        $this->attrs = [];
+        $this->validator = m::mock('Validators\{{Entity}}Validator');
+        $this->repository = m::mock('Contracts\Repositories\{{Entity}}RepositoryInterface');
+        $this->listener = m::mock('Contracts\Notification\CreatorInterface');
     }
 
-    /**
-     * Attempt to update the {{instance}} with the given attributes and
-     * notify the $listener of the success or failure
-     * 
-     * @param  {{Entity}}RepositoryInterface ${{instance}}
-     * @param  UpdaterInterface         $listener 
-     * @param  mixed                    $identity
-     * @param  array                    $attributes
-     * @return mixed - returned value from the $listener 
-     */
-    public function update({{Entity}}RepositoryInterface ${{instance}}, UpdaterInterface $listener, $identity, array $attributes = [])
+    public function testCreateSuccess()
     {
-        $instance = ${{instance}}->find($identity);
+        $this->validator->shouldReceive('validate')->with($this->attrs)->once()
+            ->andReturn(true);
 
-        if ($this->validator->validate($attributes)) {
+        $user = m::mock($this->modelClass);
+        $this->repository->shouldReceive('create')->with($this->attrs)->once()
+            ->andReturn($user);
 
-            $instance->update($attributes);
+        $this->listener->shouldReceive('creationSucceeded')->with($user)->once();
 
-            return $listener->updateSucceeded($instance);
+        $creator = new {{Entity}}Creator($this->validator);
+        $creator->create($this->repository, $this->listener, $this->attrs);
+    }
 
-        } else {
+    public function testCreateFail()
+    {
+        $this->validator->shouldReceive('validate')->with($this->attrs)->once()
+            ->andReturn(false);
 
-            return $listener->updateFailed($instance, $this->validator);
-        }
+        $this->listener->shouldReceive('creationFailed')->with($this->validator)->once();
+
+        $creator = new {{Entity}}Creator($this->validator);
+        $creator->create($this->repository, $this->listener, $this->attrs);
     }
 }

@@ -19,14 +19,14 @@ class AggregateGeneratorDelegate implements GeneratorDelegateInterface
         /**
      * Command that delegated the request
      * 
-     * @var Console\GenerateCommand
+     * @var \Console\GenerateCommand
      */
     protected $command;
 
     /**
      * Configuration of generation
      * 
-     * @var Configuration\ConfigReader
+     * @var \Configuration\ConfigReader
      */
     protected $config;
 
@@ -34,7 +34,7 @@ class AggregateGeneratorDelegate implements GeneratorDelegateInterface
      * Generator factory for making
      * aggregate generators
      * 
-     * @var Factories\GeneratorFactory
+     * @var \Factories\GeneratorFactory
      */
     protected $generator_factory;
 
