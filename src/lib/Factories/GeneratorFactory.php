@@ -22,7 +22,7 @@ class GeneratorFactory
     {
         //use naming convention to convert the input name
         //into a fully quantified class name
-        $klass =Str::studly($what);
+        $klass = Str::studly($what);
         $fqcn  = "Generators\\{$klass}";
 
         try {

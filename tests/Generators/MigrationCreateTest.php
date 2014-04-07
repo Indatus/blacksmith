@@ -1,10 +1,10 @@
 <?php namespace Generators;
 
+use DateTime;
 use Console\OptionReader;
 use Illuminate\Filesystem\Filesystem;
 use Parsers\FieldParser;
 use Mustache_Engine;
-use Generators\MigrationCreate;
 use Mockery as m;
 
 class MigrationCreateTest extends \BlacksmithTest
@@ -53,7 +53,8 @@ class MigrationCreateTest extends \BlacksmithTest
             'instance'   => 'order',
             'fields'     => $fieldData,
             'columns'    => $columnData,
-            'migration_timestamp' => date('Y_m_d_His')
+            'migration_timestamp' => date('Y_m_d_His'),
+            'year'       => (new DateTime())->format('Y')
         ];
 
         $this->assertEquals($expected, $generator->getTemplateVars());

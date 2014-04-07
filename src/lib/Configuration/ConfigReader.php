@@ -2,8 +2,6 @@
 
 use Illuminate\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
-use Mockery\CountValidator\Exception;
 
 /**
  * Class for reading files and values from Blacksmith
@@ -16,7 +14,7 @@ class ConfigReader implements ConfigReaderInterface
      * Filesystem object for interacting
      * with files and directories
      * 
-     * @var Illuminate\Filesystem\Filesystem
+     * @var \Illuminate\Filesystem\Filesystem
      */
     protected $filesystem;
 
@@ -94,8 +92,11 @@ class ConfigReader implements ConfigReaderInterface
         "unit_test",
         "functional_test",
         "service_creator",
+        "service_creator_test",
         "service_updater",
+        "service_updater_test",
         "service_destroyer",
+        "service_destroyer_test",
         "validator",
         "repository_interface",
         "db_repository"
@@ -121,8 +122,11 @@ class ConfigReader implements ConfigReaderInterface
             "unit_test",
             "functional_test",
             "service_creator",
+            "service_creator_test",
             "service_updater",
+            "service_updater_test",
             "service_destroyer",
+            "service_destroyer_test",
             "validator",
             "repository_interface",
             "db_repository"
@@ -133,9 +137,11 @@ class ConfigReader implements ConfigReaderInterface
     /**
      * Constructor function to setup our class variables
      * and load / parse the passed in config or load the default
-     * 
-     * @param Filesystem $fs  
+     *
+     * @param Filesystem $fs
      * @param string     $path
+     *
+     * @throws \Illuminate\Filesystem\FileNotFoundException
      */
     public function __construct(Filesystem $fs, $path = null)
     {
@@ -240,9 +246,8 @@ class ConfigReader implements ConfigReaderInterface
 
     /**
      * Function to return the available aggregate keys
-     * 
-     * @param  string $key
-     * @return array       
+     *
+     * @return array
      */
     public function getAvailableAggregates()
     {

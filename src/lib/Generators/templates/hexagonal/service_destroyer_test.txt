@@ -1,8 +1,11 @@
 <?php namespace Services\{{Entities}};
 
-use Contracts\Repositories\{{Entity}}RepositoryInterface;
-use Contracts\Notification\DestroyerInterface;
-use Validators\{{Entity}}Validator;
+/**
+ * This class is responsible for destroying {{Entity}} models.
+ */
+
+use Shared\Contracts\Repositories\{{Entity}}RepositoryInterface;
+use Shared\Contracts\Notification\DestroyerInterface;
 
 class {{Entity}}Destroyer
 {
@@ -13,17 +16,16 @@ class {{Entity}}Destroyer
      * $attributes are passed in as a convenience in case they
      * are needed
      * 
-     * @param  {{Entity}}RepositoryInterface ${{instance}}
+     * @param  {{Entity}}RepositoryInterface $repository
      * @param  DestroyerInterface       $listener 
      * @param  mixed                    $identity
-     * @param  array                    $attributes
      * @return mixed - returned value from the $listener 
      */
-    public function destroy({{Entity}}RepositoryInterface ${{instance}}, DestroyerInterface $listener, $identity, array $attributes = [])
+    public function destroy({{Entity}}RepositoryInterface $repository, DestroyerInterface $listener, $identity)
     {
-        $instance = ${{instance}}->find($identity);
+        $instance = $repository->findOrFail($identity);
 
-        if (${{instance}}->delete($instance)) {
+        if ($repository->delete($instance)) {
 
             return $listener->destroySucceeded($instance);
 

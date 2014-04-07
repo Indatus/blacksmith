@@ -1,5 +1,6 @@
 <?php namespace Generators;
 
+use DateTime;
 use Console\OptionReader;
 use Illuminate\Filesystem\Filesystem;
 use Parsers\FieldParser;
@@ -50,7 +51,8 @@ class FunctionalTestTest extends \BlacksmithTest
             'collection' => 'orders',
             'instance'   => 'order',
             'fields'     => $fieldData,
-            'mock_attributes'  => $mock_attribute_rows
+            'mock_attributes'  => $mock_attribute_rows,
+            'year'       => (new DateTime())->format('Y')
         ];
 
         $this->assertEquals($expected, $generator->getTemplateVars());

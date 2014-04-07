@@ -5,6 +5,9 @@ use {{Entity}};
 
 class Db{{Entity}}Repository extends DbRepository implements {{Entity}}RepositoryInterface
 {
+    /** @var {{Entity}} */
+    protected $model;
+
     public function __construct({{Entity}} $model)
     {
         parent::__construct();

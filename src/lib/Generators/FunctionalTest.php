@@ -1,8 +1,7 @@
 <?php namespace Generators;
 
-use Illuminate\Filesystem\Filesystem;
-use Mustache_Engine;
-use Parsers\FieldParser;
+
+use DateTime;
 use Illuminate\Support\Str;
 
 class FunctionalTest extends Generator implements GeneratorInterface
@@ -43,7 +42,8 @@ class FunctionalTest extends Generator implements GeneratorInterface
             'collection'      => Str::plural(Str::snake($entity)),
             'instance'        => Str::singular(Str::snake($entity)),
             'fields'          => $fieldData,
-            'mock_attributes' => $mock_attribute_rows
+            'mock_attributes' => $mock_attribute_rows,
+            'year'       => (new DateTime())->format('Y')
         ];
     }
 
