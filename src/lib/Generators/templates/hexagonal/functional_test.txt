@@ -4,6 +4,25 @@ use Mockery as m;
 
 class {{Entities}}Test extends TestCase
 {
+
+    /** @var \Mockery\MockInterface|\Yay_MockObject  */
+    protected $instance;
+
+    /** @var \Mockery\MockInterface|\Yay_MockObject  */
+    protected $entity;
+
+    /** @var \Mockery\MockInterface|\Yay_MockObject  */
+    protected $controller;
+
+    /** @var \Mockery\MockInterface|\Yay_MockObject  */
+    protected $validator;
+
+    /** @var \Mockery\MockInterface|\Yay_MockObject  */
+    protected $repository;
+
+    /** @var \Mockery\Mock */
+    protected $collection;
+
     public function __construct()
     {
         parent::__constuct();
