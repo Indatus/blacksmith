@@ -5,6 +5,9 @@ use Mockery as m;
 class {{Entities}}Test extends TestCase
 {
 
+    /** @var array */
+    protected $attributes;
+
     /** @var \Mockery\MockInterface|\Yay_MockObject  */
     protected $instance;
 
