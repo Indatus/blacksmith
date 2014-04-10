@@ -71,7 +71,7 @@ class {{Entities}}Controller extends BaseController implements CreatorInterface,
     /**
      * Handle an error with {{instance}} creation
      *
-     * @param  Validator\Validator      $validator
+     * @param  Validator      $validator
      * @return Redirect::route
      */
     public function creationFailed(Validator $validator)
@@ -136,7 +136,7 @@ class {{Entities}}Controller extends BaseController implements CreatorInterface,
      * Handle an error with {{instance}} update
      *
      * @param  InstanceInterface $instance
-     * @param  Validator\Validator      $validator
+     * @param  Validator      $validator
      * @return Redirect::route
      */
     public function updateFailed(InstanceInterface $instance, Validator $validator)
