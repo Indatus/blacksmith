@@ -33,17 +33,18 @@ class {{Entity}}Creator
      * @param  array                    $attributes
      * @return mixed - returned value from the $listener                        
      */
-    public function create({{Entity}}RepositoryInterface ${{instance}}, CreatorInterface $listener, array $attributes = [])
+    public function create({{Entity}}RepositoryInterface $repository, CreatorInterface $listener, array $attributes = [])
     {
         if ($this->validator->validate($attributes)) {
 
-            $instance = ${{instance}}->create($attributes);
-            
-            return $listener->creationSucceeded($instance);
+            if ($instance = $repository->create($attributes)) {
+                return $listener->creationSucceeded($instance);
+            } else {
+                return $listener->creationFailed();
+            }
 
         } else {
-
-            return $listener->creationFailed($this->validator);
+            return $listener->creationFailedValidation($this->validator);
         }
     }
 }
