@@ -10,6 +10,8 @@ Blacksmith works nicely with the [Laravel](http://laravel.com) PHP framework but
 
 ---
 
+[![Build Status](https://travis-ci.org/Indatus/blacksmith.png?branch=master)](https://travis-ci.org/Indatus/blacksmith) [![Coverage Status](https://coveralls.io/repos/Indatus/blacksmith/badge.png)](https://coveralls.io/r/Indatus/blacksmith)
+
 Out of the box for the 1.0.0 release Blacksmith ships with a [Laravel hexagonal architecture](https://github.com/brianwebb01/hexagonal-laravel-experiment) configuration and templates. Why? Because this is what I needed first.
 
 > **Note:** If you want to get started with the hexagonal architecture referenced above for a new app.  Use [Foreman](https://github.com/indatus/foreman) with [this example config](https://gist.github.com/brianwebb01/9201450) (changing the 'from' paths appropriatley).
