@@ -10,7 +10,7 @@ Blacksmith works nicely with the [Laravel](http://laravel.com) PHP framework but
 
 ---
 
-[![Build Status](https://travis-ci.org/Indatus/blacksmith.png?branch=master)](https://travis-ci.org/Indatus/blacksmith) [![Coverage Status](https://coveralls.io/repos/Indatus/blacksmith/badge.png)](https://coveralls.io/r/Indatus/blacksmith)
+[![Build Status](https://travis-ci.org/Indatus/blacksmith.png?branch=master)](https://travis-ci.org/Indatus/blacksmith) [![Code Coverage](https://scrutinizer-ci.com/g/Indatus/blacksmith/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Indatus/blacksmith/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Indatus/blacksmith/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Indatus/blacksmith/?branch=master)
 
 Out of the box for the 1.0.0 release Blacksmith ships with a [Laravel hexagonal architecture](https://github.com/brianwebb01/hexagonal-laravel-experiment) configuration and templates. Why? Because this is what I needed first.
 
