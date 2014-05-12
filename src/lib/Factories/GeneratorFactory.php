@@ -14,7 +14,6 @@ class GeneratorFactory
      * on the given input
      * 
      * @param  string           $what the desired generator
-     * @param  array            $options command line parameter options
      * @param  ReflectionClass  $reflectionClass used for finding out info about class to gen
      * @return Generators\GeneratorInterface
      */

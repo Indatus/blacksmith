@@ -1,8 +1,5 @@
 <?php namespace Generators;
 
-use Illuminate\Filesystem\Filesystem;
-use Mustache_Engine;
-use Parsers\FieldParser;
 use Illuminate\Support\Str;
 
 class Form extends Generator implements GeneratorInterface

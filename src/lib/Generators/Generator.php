@@ -106,7 +106,6 @@ class Generator implements GeneratorInterface
      * @param  string $sourceTemplate path to the raw template to work with
      * @param  string $destinationDir destination directory to write parsed template into
      * @param  string $fileName       templatized filename (not path) to write to
-     * @param  string $fieldData      data about specific fields of the entity
      * @return bool
      */
     public function make($entity, $sourceTemplate, $destinationDir, $fileName = null)

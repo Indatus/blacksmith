@@ -14,9 +14,9 @@ interface GeneratorDelegateInterface
      *
      * @param GenerateCommand           $cmd          executed command
      * @param ConfigReaderInterface     $cfg          reader of the config file
-     * @param GeneratorFactory          $genFactory   generator factory
      * @param array                     $command_args command arguments
      * @param OptionReader              $optionReader command options
+     * @return void
      */
     public function __construct(
         GenerateCommand $cmd,
@@ -27,5 +27,8 @@ interface GeneratorDelegateInterface
         OptionReader $optionReader
     );
 
+    /**
+     * @return boolean
+     */
     public function run();
 }

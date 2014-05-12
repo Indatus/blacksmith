@@ -14,6 +14,7 @@ interface ConfigReaderInterface
      * 
      * @param Filesystem $fs  
      * @param string     $path
+     * @return void
      */
     public function __construct(Filesystem $fs, $path = null);
 
