@@ -1,7 +1,10 @@
 # Blacksmith
 
+[<img src="https://s3-us-west-2.amazonaws.com/oss-avatars/blacksmith.png"/>](http://indatus.com/company/careers)
 
+<!--
 <img height="300" align="left" src="https://s3-us-west-2.amazonaws.com/oss-avatars/blacksmith_round_readme.png">
+-->
 
 
 Blacksmith is a code generation tool which automates the creation of common files that you'd typically create for each entity in your application.
