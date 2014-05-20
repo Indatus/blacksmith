@@ -35,6 +35,8 @@ class {{Entity}}CreatorTest extends TestCase
         $this->listener = m::mock('Contracts\Notification\CreatorInterface');
     }
 
+
+
     public function testCreateSuccess()
     {
         $this->validator->shouldReceive('validate')->with($this->attrs)->once()
@@ -50,12 +52,30 @@ class {{Entity}}CreatorTest extends TestCase
         $creator->create($this->repository, $this->listener, $this->attrs);
     }
 
+
+
     public function testCreateFail()
+    {
+        $this->validator->shouldReceive('validate')->with($this->attrs)->once()
+            ->andReturn(true);
+
+        $this->repository->shouldReceive('create')->with($this->attrs)->once()
+            ->andReturn(false);
+
+        $this->listener->shouldReceive('creationFailed')->once();
+
+        $creator = new {{Entity}}Creator($this->validator);
+        $creator->create($this->repository, $this->listener, $this->attrs);
+    }
+
+
+
+    public function testCreateFailValidation()
     {
         $this->validator->shouldReceive('validate')->with($this->attrs)->once()
             ->andReturn(false);
 
-        $this->listener->shouldReceive('creationFailed')->with($this->validator)->once();
+        $this->listener->shouldReceive('creationFailedValidation')->with($this->validator)->once();
 
         $creator = new {{Entity}}Creator($this->validator);
         $creator->create($this->repository, $this->listener, $this->attrs);
