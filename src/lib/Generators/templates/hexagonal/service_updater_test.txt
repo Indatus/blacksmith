@@ -1,14 +1,14 @@
 <?php namespace Tests\Services\{{Entities}};
 
 /**
- * This class contains unit tests for the {{Entity}} updater.
+ * This class contains unit tests
+ *
  */
 
 use Mockery as m;
-use Services\{{Entities}}\{{Entity}}Creator;
-use TestCase;
+use Services\{{Entities}}\{{Entity}}Updater;
 
-class {{Entity}}CreatorTest extends TestCase
+class {{Entity}}UpdaterTest extends \TestCase
 {
     /** @var array */
     protected $attrs;
@@ -32,32 +32,73 @@ class {{Entity}}CreatorTest extends TestCase
         $this->attrs = [];
         $this->validator = m::mock('Validators\{{Entity}}Validator');
         $this->repository = m::mock('Contracts\Repositories\{{Entity}}RepositoryInterface');
-        $this->listener = m::mock('Contracts\Notification\CreatorInterface');
+        $this->listener = m::mock('Contracts\Notification\UpdaterInterface');
     }
 
-    public function testCreateSuccess()
+
+
+    /**
+     * If the stars align, success!
+     */
+    public function testUpdateSuccess()
     {
-        $this->validator->shouldReceive('validate')->with($this->attrs)->once()
+        ${{instance}} = m::mock($this->modelClass);
+        ${{instance}}->shouldReceive('fill')->with($this->attrs)->once();
+
+        $this->repository
+            ->shouldReceive('findOrFail')
+            ->with(1)
+            ->once()
+            ->andReturn(${{instance}});
+
+        $this->validator
+            ->shouldReceive('validate')
+            ->with($this->attrs)
+            ->once()
             ->andReturn(true);
 
-        $user = m::mock($this->modelClass);
-        $this->repository->shouldReceive('create')->with($this->attrs)->once()
-            ->andReturn($user);
+        $this->repository
+            ->shouldReceive('update')
+            ->with(${{instance}})
+            ->once()
+            ->andReturn(${{instance}});
 
-        $this->listener->shouldReceive('creationSucceeded')->with($user)->once();
+        $this->listener
+            ->shouldReceive('updateSucceeded')
+            ->with(${{instance}})
+            ->once();
 
-        $creator = new {{Entity}}Creator($this->validator);
-        $creator->create($this->repository, $this->listener, $this->attrs);
+        $updater = new {{Entity}}Updater($this->validator);
+        $updater->update($this->repository, $this->listener, 1, $this->attrs);
     }
 
-    public function testCreateFail()
+
+
+    /**
+     * If validation fails, update fails
+     */
+    public function testUpdateFailedValidation()
     {
-        $this->validator->shouldReceive('validate')->with($this->attrs)->once()
+        ${{instance}} = m::mock($this->modelClass);
+
+        $this->repository
+            ->shouldReceive('findOrFail')
+            ->with(1)
+            ->once()
+            ->andReturn(${{instance}});
+
+        $this->validator
+            ->shouldReceive('validate')
+            ->with($this->attrs)
+            ->once()
             ->andReturn(false);
 
-        $this->listener->shouldReceive('creationFailed')->with($this->validator)->once();
+        $this->listener
+            ->shouldReceive('updateFailed')
+            ->with(${{instance}}, $this->validator)
+            ->once();
 
-        $creator = new {{Entity}}Creator($this->validator);
-        $creator->create($this->repository, $this->listener, $this->attrs);
+        $updater = new {{Entity}}Updater($this->validator);
+        $updater->update($this->repository, $this->listener, 1, $this->attrs);
     }
 }

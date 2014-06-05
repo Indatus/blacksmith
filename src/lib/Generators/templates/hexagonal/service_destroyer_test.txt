@@ -1,37 +1,86 @@
-<?php namespace Services\{{Entities}};
+<?php namespace Tests\Services\{{Entities}};
 
 /**
- * This class is responsible for destroying {{Entity}} models.
+ * This class contains unit tests for the {{Entity}} creator.
+ *
  */
 
-use Shared\Contracts\Repositories\{{Entity}}RepositoryInterface;
-use Shared\Contracts\Notification\DestroyerInterface;
+use Mockery as m;
+use Services\{{Entities}}\{{Entity}}Creator;
 
-class {{Entity}}Destroyer
+class {{Entity}}CreatorTest extends \TestCase
 {
+    /** @var array */
+    protected $attrs;
 
-    /**
-     * Attempt to destroy the {{instance}} and
-     * notify the $listener of the success or failure.  The
-     * $attributes are passed in as a convenience in case they
-     * are needed
-     * 
-     * @param  {{Entity}}RepositoryInterface $repository
-     * @param  DestroyerInterface       $listener 
-     * @param  mixed                    $identity
-     * @return mixed - returned value from the $listener 
-     */
-    public function destroy({{Entity}}RepositoryInterface $repository, DestroyerInterface $listener, $identity)
+    /** @var \Mockery\MockInterface */
+    protected $validator;
+
+    /** @var \Mockery\MockInterface */
+    protected $repository;
+
+    /** @var \Mockery\MockInterface */
+    protected $listener;
+
+    /** @var string */
+    protected $modelClass = '\{{Entity}}';
+
+    public function setUp()
     {
-        $instance = $repository->findOrFail($identity);
+        parent::setUp();
 
-        if ($repository->delete($instance)) {
+        $this->attrs = [];
+        $this->validator = m::mock('Validators\{{Entity}}Validator');
+        $this->repository = m::mock('Contracts\Repositories\{{Entity}}RepositoryInterface');
+        $this->listener = m::mock('Contracts\Notification\CreatorInterface');
+    }
 
-            return $listener->destroySucceeded($instance);
 
-        } else {
 
-            return $listener->destroyFailed($instance);
-        }
+    public function testCreateSuccess()
+    {
+        $this->validator->shouldReceive('validate')->with($this->attrs)->once()
+            ->andReturn(true);
+
+        $instance = m::mock($this->modelClass);
+        
+        $this->repository->shouldReceive('create')->with($this->attrs)->once()
+            ->andReturn($instance);
+
+        $this->listener->shouldReceive('creationSucceeded')->with($instance)->once();
+
+        $creator = new {{Entity}}Creator($this->validator);
+        $creator->create($this->repository, $this->listener, $this->attrs);
+    }
+
+
+
+    public function testCreateFail()
+    {
+        $this->validator->shouldReceive('validate')->with($this->attrs)->once()
+            ->andReturn(true);
+
+        $this->repository->shouldReceive('create')->with($this->attrs)->once()
+            ->andReturn(false);
+
+        $this->listener->shouldReceive('creationFailed')->once()
+            ->with($this->validator, $this->attrs);
+
+        $creator = new {{Entity}}Creator($this->validator);
+        $creator->create($this->repository, $this->listener, $this->attrs);
+    }
+
+
+
+    public function testCreateFailValidation()
+    {
+        $this->validator->shouldReceive('validate')->with($this->attrs)->once()
+            ->andReturn(false);
+
+        $this->listener->shouldReceive('creationFailed')->once()
+            ->with($this->validator, $this->attrs);
+
+        $creator = new {{Entity}}Creator($this->validator);
+        $creator->create($this->repository, $this->listener, $this->attrs);
     }
 }
