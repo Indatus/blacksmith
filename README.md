@@ -194,6 +194,8 @@ Variable | Description | Output Example
 --- | --- | ---
 `Entity` | Singular studly cased entity name | Order
 `Entities` | Plural studly cased entity name | Orders
+`Base` | Studly cased directory path | Order/Sub/Directory
+`Namespace` | Studly cased namespace | Order\Sub\Directory
 `collection` | Plural underscore cased entity name | orders
 `instance` | Singular underscore cased entity name | order
 `fields` | Associative multi-dimensional array of field names and attributes | `['name' => ['type' => 'string']]`

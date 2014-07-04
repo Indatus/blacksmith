@@ -53,6 +53,14 @@ class Generator implements GeneratorInterface
     protected $entity;
 
     /**
+     * Name of the base directory the
+     * generator is working with
+     * 
+     * @var string
+     */
+    protected $base;
+
+    /**
      * Data about specific fields
      * belonging to the Entity
      *
@@ -112,7 +120,7 @@ class Generator implements GeneratorInterface
     {
         //set the entity we're creating for
         //later template parsing operations
-        $this->entity = $entity;
+        list($this->base, $this->entity) = $this->parseEntity($entity);
 
         //if any field data was given, parse it
         $fieldData = $this->optionReader->getFields();
@@ -199,8 +207,12 @@ class Generator implements GeneratorInterface
     public function getTemplateVars()
     {
         $entity = $this->getEntityName();
+        $base = $this->getBaseName();
+        $namespace = $this->getNamespace();
 
         return [
+            'Base' => $base,
+            'Namespace' => $namespace,
             'Entity'     => Str::studly($entity),
             'Entities'   => Str::plural(Str::studly($entity)),
             'collection' => Str::plural(Str::snake($entity)),
@@ -220,6 +232,46 @@ class Generator implements GeneratorInterface
     public function getEntityName()
     {
         return $this->entity;
+    }
+
+
+    /**
+     * Function to get the name of the base
+     * directory we're working with
+     * 
+     * @return string
+     */
+    public function getBaseName()
+    {
+        if (is_array($this->base)) {
+            $base = array_map(function ($value) {
+                return Str::studly($value);
+            }, $this->base);
+
+            return implode('/', $base);
+        }
+
+        return Str::studly($this->base);
+    }
+
+
+    /**
+     * Function to get the namespace of the
+     * file we're working with
+     * 
+     * @return string
+     */
+    public function getNamespace()
+    {
+        if (is_array($this->base)) {
+            $base = array_map(function ($value) {
+                return Str::studly($value);
+            }, $this->base);
+
+            return implode('\\', $base);
+        }
+
+        return Str::studly($this->base);
     }
 
 
@@ -246,5 +298,24 @@ class Generator implements GeneratorInterface
     {
         $rawTemplate = $this->filesystem->get($sourceTemplate);
         return $this->mustache->render($rawTemplate, $this->getTemplateVars());
+    }
+    
+
+    /**
+     * Parse entity argument into Base and Entity
+     * 
+     * @param  string $entity
+     * @return array
+     */
+    protected function parseEntity($entity)
+    {
+        if (Str::contains($entity, '.')) {
+            $arguments = explode('.', $entity);
+            $entity = array_pop($arguments);
+
+            return [$arguments, $entity];
+        }
+
+        return [$entity, $entity];
     }
 }
