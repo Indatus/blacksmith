@@ -165,6 +165,70 @@ class GeneratorTest extends \BlacksmithTest
 
 
 
+    public function testMakeWithCustomFilenameAndBase()
+    {
+        $template = '/path/to/source/template.txt';
+        $destTplPath = '/render/{{Base}}';
+        $destination = '/render/Order/Nested/File';
+        $tplFileName = '{{Entity}}FileName.php';
+        $prsFileName = 'ReceiptFileName.php';
+
+        $outfile = implode(DIRECTORY_SEPARATOR, [$destination, $prsFileName]);
+
+        $fs = m::mock('Illuminate\Filesystem\Filesystem');
+
+        $outfileDir = pathinfo($outfile, PATHINFO_DIRNAME);
+        $fs->shouldReceive('exists')
+            ->once()
+            ->with($outfileDir)
+            ->andReturn(false);
+
+        $fs->shouldReceive('makeDirectory')
+            ->once()
+            ->with($outfileDir, 0777, true)
+            ->andReturn(true);
+
+        $fs->shouldReceive('exists')
+            ->once()
+            ->with($outfile)
+            ->andReturn(false);
+
+        $fs->shouldReceive('put')
+            ->once()
+            ->with($outfile, "");
+
+        $me = m::mock('Mustache_Engine');
+        $me->shouldDeferMissing();
+
+        $fp = m::mock('Parsers\FieldParser');
+        $fp->shouldDeferMissing();
+
+        $or = m::mock('Console\OptionReader');
+        $or->shouldReceive('getFields')->andReturn([]);
+
+        $generator = m::mock('Generators\Generator', array(
+                $fs,
+                $me,
+                $fp,
+                $or
+            ));
+        $generator->shouldDeferMissing();
+
+        $generator->shouldReceive('getTemplate')
+            ->once()
+            ->with($template)
+            ->andReturn("");
+
+        $result = $generator->make('order.nested.file.receipt', $template, $destTplPath, $tplFileName);
+
+        $this->assertEquals(
+            $prsFileName,
+            $generator->getFileName()
+        );
+    }
+
+
+
     public function testGetTemplateVarsForSimpleEntity()
     {
         $generator = m::mock('Generators\Generator');
@@ -173,7 +237,15 @@ class GeneratorTest extends \BlacksmithTest
         $generator->shouldReceive('getEntityName')->once()
             ->andReturn('Order');
 
+        $generator->shouldReceive('getBaseName')->once()
+            ->andReturn('Order');
+
+        $generator->shouldReceive('getNamespace')->once()
+            ->andReturn('Order');
+
         $expected = [
+            'Base'      => 'Order',
+            'Namespace' => 'Order',
             'Entity'     => 'Order',
             'Entities'   => 'Orders',
             'collection' => 'orders',
@@ -195,10 +267,18 @@ class GeneratorTest extends \BlacksmithTest
         $generator->shouldReceive('getEntityName')->once()
             ->andReturn('Order');
 
+        $generator->shouldReceive('getBaseName')->once()
+            ->andReturn('Order');
+
+        $generator->shouldReceive('getNamespace')->once()
+            ->andReturn('Order');
+
         $generator->shouldReceive('getFieldData')->once()
             ->andReturn(['name' => ['type' => 'string']]);
 
         $expected = [
+            'Base'     => 'Order',
+            'Namespace'  => 'Order',
             'Entity'     => 'Order',
             'Entities'   => 'Orders',
             'collection' => 'orders',
@@ -220,7 +300,15 @@ class GeneratorTest extends \BlacksmithTest
         $generator->shouldReceive('getEntityName')->once()
             ->andReturn('EcommerceOrderCreator');
 
+        $generator->shouldReceive('getBaseName')->once()
+            ->andReturn('EcommerceOrderCreator');
+
+        $generator->shouldReceive('getNamespace')->once()
+            ->andReturn('EcommerceOrderCreator');
+
         $expected = [
+            'Base'     => 'EcommerceOrderCreator',
+            'Namespace' => 'EcommerceOrderCreator',
             'Entity'     => 'EcommerceOrderCreator',
             'Entities'   => 'EcommerceOrderCreators',
             'collection' => 'ecommerce_order_creators',
